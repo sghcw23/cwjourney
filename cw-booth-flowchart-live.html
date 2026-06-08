@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Choose Wisely · Booth Activity</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e8f4fd 0%, #f5e6ff 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 16px; font-family: 'DM Sans', sans-serif;
+  }
+  .wrapper { width: 100%; max-width: 740px; }
+  .header  { text-align: center; margin-bottom: 20px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #fff; border-radius: 99px; padding: 6px 14px;
+    font-size: 11px; font-family: 'DM Mono', monospace; color: #555;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 10px; letter-spacing: .5px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 1.5s infinite; flex-shrink: 0; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+  h1 { font-family: 'Syne', sans-serif; font-size: clamp(22px,5vw,30px); font-weight: 900; color: #111; line-height: 1.1; }
+
+  .card { background: #fff; border-radius: 24px; padding: 28px; box-shadow: 0 8px 40px rgba(0,0,0,.10); min-height: 360px; }
+  .card.animate { animation: fadeUp .25s ease forwards; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  /* stepper */
+  .stepper { display: flex; align-items: center; margin-bottom: 22px; }
+  .step-dot {
+    width: 28px; height: 28px; border-radius: 50%; border: 2px solid #e0e0e0;
+    background: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; font-family: 'DM Mono', monospace; color: #bbb;
+    flex-shrink: 0; transition: all .3s;
+  }
+  .step-dot.active  { border-color: #3a86ff; color: #3a86ff; background: #f0f5ff; }
+  .step-dot.done    { border-color: #22c55e; background: #22c55e; color: #fff; }
+  .step-dot.flagged { border-color: #f59e0b; background: #fff8e1; color: #b45309; font-size: 13px; }
+  .step-line { flex: 1; height: 2px; background: #e0e0e0; transition: background .3s; }
+  .step-line.done { background: #22c55e; }
+
+  /* progress */
+  .progress-wrap { margin-bottom: 20px; }
+  .progress-labels { display: flex; justify-content: space-between; font-size: 11px; font-family: 'DM Mono', monospace; color: #999; margin-bottom: 5px; }
+  .progress-track { height: 6px; background: #ebebeb; border-radius: 99px; overflow: hidden; }
+  .progress-fill  { height: 100%; background: linear-gradient(90deg,#3a86ff,#8338ec); border-radius: 99px; transition: width .4s ease; }
+
+  .step-label { font-size: 11px; font-family: 'DM Mono', monospace; color: #999; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .question   { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; line-height: 1.3; color: #111; margin-bottom: 6px; }
+  .subtitle   { font-size: 13.5px; color: #666; line-height: 1.55; margin-bottom: 24px; }
+
+  /* options */
+  .options { display: flex; flex-direction: column; gap: 11px; }
+  .option-btn {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px; border-radius: 14px;
+    border: 2px solid #e0e0e0; background: #fafafa; cursor: pointer;
+    text-align: left; font-family: 'DM Sans', sans-serif;
+    font-size: 14.5px; font-weight: 600; color: #1a1a1a; transition: all .18s;
+  }
+  .option-btn:hover { border-color: #3a86ff; background: #f0f5ff; transform: translateX(4px); box-shadow: 0 4px 20px rgba(58,134,255,.15); }
+  .opt-icon  { font-size: 22px; flex-shrink: 0; }
+  .opt-arrow { margin-left: auto; color: #ccc; font-size: 18px; }
+
+  /* resource */
+  .res-header {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff8e1; border: 1.5px solid #f59e0b;
+    border-radius: 12px; padding: 10px 14px; margin-bottom: 16px;
+  }
+  .res-header span { font-size: 12px; font-family: 'DM Mono', monospace; color: #92400e; letter-spacing: .5px; font-weight: 600; }
+  .res-title { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 800; line-height: 1.3; color: #111; margin-bottom: 8px; }
+  .res-body  { font-size: 13.5px; color: #444; line-height: 1.65; margin-bottom: 14px; }
+  .tips { list-style: none; margin-bottom: 14px; }
+  .tips li { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; font-size: 13.5px; color: #333; line-height: 1.5; }
+  .tips li::before { content: "\25B8"; color: #3a86ff; flex-shrink: 0; margin-top: 2px; }
+  .res-box { background: #f0f5ff; border: 1.5px solid #b8d0ff; border-radius: 12px; padding: 12px 16px; margin-bottom: 14px; }
+  .res-box .rb-title { font-weight: 700; font-size: 14px; color: #1a56db; margin-bottom: 4px; }
+  .res-box .rb-desc  { font-size: 13px; color: #555; }
+
+  /* dual playbook boxes */
+  .playbook-pair { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .pb-box { border-radius: 12px; padding: 13px 16px; border: 1.5px solid; }
+  .pb-box.cw { background: #f0f5ff; border-color: #b8d0ff; }
+  .pb-box.qi { background: #f5f3ff; border-color: #c4b5fd; }
+  .pb-box .pb-label { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 1px; margin-bottom: 4px; }
+  .pb-box.cw .pb-label { color: #1e40af; }
+  .pb-box.qi .pb-label { color: #5b21b6; }
+  .pb-box .pb-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .pb-box.cw .pb-title { color: #1a56db; }
+  .pb-box.qi .pb-title { color: #4c1d95; }
+  .pb-box .pb-desc  { font-size: 13px; }
+  .pb-box.cw .pb-desc { color: #3b5fc0; }
+  .pb-box.qi .pb-desc { color: #6d28d9; }
+
+  .continue-note { font-size: 12px; color: #999; font-style: italic; margin-bottom: 12px; }
+
+  /* CTA */
+  .btn-continue {
+    width: 100%; padding: 13px; border-radius: 12px;
+    background: linear-gradient(135deg,#3a86ff,#8338ec);
+    color: #fff; border: none; cursor: pointer;
+    font-size: 14px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+    letter-spacing: .3px; transition: opacity .15s;
+  }
+  .btn-continue:hover { opacity: .88; }
+
+  /* summary */
+  .summary-items { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
+  .summary-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 11px 15px; border-radius: 12px; border: 1.5px solid #e0e0e0;
+    font-size: 13.5px; font-family: 'DM Sans', sans-serif;
+  }
+  .summary-item.ok      { border-color: #86efac; background: #f0fdf4; color: #15803d; }
+  .summary-item.gap     { border-color: #fcd34d; background: #fffbeb; color: #92400e; }
+  .summary-item.unknown { border-color: #e0e0e0; background: #fafafa; color: #888; }
+  .si-icon  { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+  .si-label { font-weight: 600; line-height: 1.3; }
+  .si-sub   { font-size: 12px; opacity: .75; margin-top: 3px; }
+
+  /* QR section */
+  .qr-section { margin-bottom: 20px; }
+  .qr-section-title { font-size: 11px; font-family: 'DM Mono', monospace; color: #888; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .qr-card {
+    border: 1.5px solid #e0e0e0; border-radius: 14px;
+    padding: 14px; text-align: center; background: #fafafa;
+  }
+  .qr-card.qi   { border-color: #c4b5fd; background: #f5f3ff; }
+  .qr-card.cw   { border-color: #b8d0ff; background: #f0f5ff; }
+  .qr-placeholder {
+    width: 72px; height: 72px; margin: 0 auto 8px;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .qr-placeholder svg { width: 72px; height: 72px; }
+  .qr-label { font-size: 12px; font-weight: 700; font-family: 'DM Sans', sans-serif; color: #333; margin-bottom: 3px; line-height: 1.3; }
+  .qr-sub   { font-size: 11px; color: #888; line-height: 1.3; }
+  .qr-card.qi .qr-label { color: #4c1d95; }
+  .qr-card.cw .qr-label { color: #1a56db; }
+
+  /* idea board */
+  .idea-section { margin-bottom: 20px; }
+  .idea-board-card {
+    border: 2px dashed #f59e0b; border-radius: 14px;
+    padding: 16px 18px; background: #fffbeb;
+  }
+  .ib-heading { font-size: 14px; font-weight: 700; color: #92400e; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .ib-body    { font-size: 13px; color: #78350f; line-height: 1.6; }
+  .domain-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .domain-tag {
+    font-size: 11px; font-weight: 700; font-family: 'DM Mono', monospace;
+    padding: 4px 10px; border-radius: 99px; border: 1.5px solid;
+  }
+  .domain-tag.d1 { background: #dbeafe; border-color: #93c5fd; color: #1e40af; }
+  .domain-tag.d2 { background: #dcfce7; border-color: #86efac; color: #166534; }
+  .domain-tag.d3 { background: #fce7f3; border-color: #f9a8d4; color: #9d174d; }
+  .domain-tag.d4 { background: #fef9c3; border-color: #fde047; color: #854d0e; }
+  .domain-tag.d5 { background: #f3e8ff; border-color: #d8b4fe; color: #6b21a8; }
+
+  /* char card */
+  .char-card    { text-align: center; }
+  .char-emoji   { font-size: 64px; line-height: 1; margin-bottom: 10px; }
+  .char-youare  { font-size: 11px; font-family: 'DM Mono', monospace; color: #999; letter-spacing: 2px; margin-bottom: 6px; }
+  .char-name    { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 900; color: #111; margin-bottom: 6px; }
+  .char-tagline { font-size: 14px; color: #555; font-style: italic; line-height: 1.5; margin-bottom: 20px; }
+  .nudge-box    { border-radius: 16px; padding: 14px 18px; margin-bottom: 18px; text-align: left; }
+  .nudge-label  { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 1px; margin-bottom: 5px; }
+  .nudge-text   { font-size: 14px; font-weight: 600; }
+
+  .btn-row    { display: flex; gap: 10px; }
+  .btn-ghost  { flex:1; padding:12px; border-radius:12px; background:#f5f5f5; border:2px solid #e0e0e0; color:#444; cursor:pointer; font-size:13.5px; font-weight:600; font-family:'DM Sans',sans-serif; transition:background .15s; }
+  .btn-ghost:hover { background:#ebebeb; }
+  .btn-primary { flex:2; padding:12px; border-radius:12px; background:linear-gradient(135deg,#3a86ff,#8338ec); color:#fff; border:none; cursor:pointer; font-size:13.5px; font-weight:700; font-family:'DM Sans',sans-serif; }
+
+  .thankyou  { text-align:center; padding:20px 0; }
+  .ty-emoji  { font-size:56px; margin-bottom:14px; }
+  .ty-title  { font-family:'Syne',sans-serif; font-size:25px; font-weight:900; color:#111; margin-bottom:10px; }
+  .ty-body   { font-size:14px; color:#555; line-height:1.65; margin-bottom:26px; }
+
+  .footer { text-align:center; margin-top:14px; font-size:11px; color:#bbb; font-family:'DM Mono',monospace; }
+
+  /* divider */
+  .divider { height:1px; background:#f0f0f0; margin: 12px 0; }
+  /* ---- combined final screen ---- */
+  .final-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  .final-left {
+    text-align: center;
+    position: sticky;
+    top: 0;
+  }
+  .final-emoji   { font-size: 52px; line-height: 1; margin-bottom: 6px; }
+  .final-youare  { font-size: 10px; font-family: 'DM Mono', monospace; color: #999; letter-spacing: 2px; margin-bottom: 4px; }
+  .final-name    { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 900; color: #111; margin-bottom: 4px; line-height: 1.2; }
+  .final-tagline { font-size: 12px; color: #666; font-style: italic; line-height: 1.4; margin-bottom: 10px; }
+  .final-nudge   { border-radius: 12px; padding: 10px 13px; text-align: left; }
+  .final-nudge .fn-label { font-size: 10px; font-family: 'DM Mono', monospace; letter-spacing: 1px; margin-bottom: 4px; }
+  .final-nudge .fn-text  { font-size: 12.5px; font-weight: 600; line-height: 1.4; }
+
+  .final-right { display: flex; flex-direction: column; gap: 10px; }
+
+  /* compact summary rows */
+  .sum-rows { display: flex; flex-direction: column; gap: 6px; }
+  .sum-row {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px 12px; border-radius: 10px; border: 1.5px solid;
+    font-size: 12.5px; font-family: 'DM Sans', sans-serif; font-weight: 600;
+  }
+  .sum-row.ok  { border-color: #86efac; background: #f0fdf4; color: #15803d; }
+  .sum-row.gap { border-color: #fcd34d; background: #fffbeb; color: #92400e; }
+  .sum-row.unknown { border-color: #e2e8f0; background: #f8fafc; color: #94a3b8; }
+  .sum-row .sr-icon { font-size: 14px; flex-shrink: 0; }
+
+  /* compact QR row */
+  .qr-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .qr-mini {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: 10px; border: 1.5px solid;
+  }
+  .qr-mini.qi { border-color: #c4b5fd; background: #f5f3ff; }
+  .qr-mini.cw { border-color: #b8d0ff; background: #f0f5ff; }
+  .qr-mini svg { flex-shrink: 0; border-radius: 4px; }
+  .qr-mini-text .qmt-title { font-size: 12px; font-weight: 700; }
+  .qr-mini.qi .qmt-title { color: #4c1d95; }
+  .qr-mini.cw .qmt-title { color: #1a56db; }
+  .qr-mini-text .qmt-sub { font-size: 10.5px; color: #888; margin-top: 1px; }
+
+  /* compact idea board */
+  .idea-mini {
+    border: 2px dashed #f59e0b; border-radius: 12px;
+    padding: 10px 14px; background: #fffbeb;
+  }
+  .idea-mini .im-title { font-size: 12px; font-weight: 700; color: #92400e; margin-bottom: 4px; }
+  .idea-mini .im-body  { font-size: 12px; color: #78350f; line-height: 1.5; }
+  .domain-tags-mini { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+  .domain-tag-mini {
+    font-size: 10px; font-weight: 700; font-family: 'DM Mono', monospace;
+    padding: 3px 8px; border-radius: 99px; border: 1.5px solid;
+  }
+  .domain-tag-mini.d1 { background:#dbeafe; border-color:#93c5fd; color:#1e40af; }
+  .domain-tag-mini.d2 { background:#dcfce7; border-color:#86efac; color:#166534; }
+  .domain-tag-mini.d3 { background:#fce7f3; border-color:#f9a8d4; color:#9d174d; }
+  .domain-tag-mini.d4 { background:#fef9c3; border-color:#fde047; color:#854d0e; }
+  .domain-tag-mini.d5 { background:#f3e8ff; border-color:#d8b4fe; color:#6b21a8; }
+
+  .final-btns { display: flex; gap: 10px; margin-top: 4px; }
+  .final-btns .btn-ghost   { flex: 1; }
+  .final-btns .btn-primary { flex: 2; }
+
+  /* ---- email capture ---- */
+  .email-section { display:flex; flex-direction:column; gap:5px; }
+  .email-section .step-label { margin-bottom:0; }
+  .email-row { display:flex; gap:7px; }
+  .email-input {
+    flex:1; padding:9px 12px; border-radius:9px;
+    border:1.5px solid #e0e0e0; font-size:13px;
+    font-family:'DM Sans',sans-serif; outline:none;
+    transition:border-color .15s; background:#fafafa;
+  }
+  .email-input:focus { border-color:#3a86ff; background:#fff; }
+  .email-input::placeholder { color:#bbb; }
+  .email-send-btn {
+    padding:9px 14px; border-radius:9px; white-space:nowrap;
+    background:linear-gradient(135deg,#3a86ff,#8338ec);
+    color:#fff; border:none; cursor:pointer;
+    font-size:13px; font-weight:700; font-family:'DM Sans',sans-serif;
+    transition:opacity .15s; flex-shrink:0;
+  }
+  .email-send-btn:hover  { opacity:.88; }
+  .email-send-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .email-meta { display:flex; align-items:center; justify-content:space-between; }
+  .email-status { font-size:11.5px; min-height:15px; }
+  .email-status.ok    { color:#15803d; }
+  .email-status.err   { color:#dc2626; }
+  .email-copy-btn {
+    font-size:11px; color:#94a3b8; background:none; border:none;
+    cursor:pointer; font-family:'DM Mono',monospace; text-decoration:underline;
+    padding:0; transition:color .15s;
+  }
+  .email-copy-btn:hover { color:#555; }
+
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <div class="badge"><span class="dot"></span> CHOOSE WISELY &middot; BOOTH ACTIVITY</div>
+    <h1>Where Are You<br>in Your Journey?</h1>
+  </div>
+  <div class="card" id="card"></div>
+  <p class="footer">~5 min activity &middot; Scan QR for resources</p>
+</div>
+
+<script>
+
+/* ================================================================
+   EMAIL SETUP  (optional — Copy summary works without this)
+
+   Paste your Google Apps Script web app URL below.
+   Leave as '' to disable sending (Copy summary still works).
+
+   Setup instructions: see cw-gas-setup-instructions.txt
+   ================================================================ */
+var GAS_URL = 'https://script.google.com/macros/s/AKfycby-I6K5jIHP6uqpkU5-jaPWWbE6iDWWhbNirRtaP8OaMuM72vpWs1sTjnlNJwnu_5aEnw/exec';   // e.g. 'https://script.google.com/macros/s/AKfy.../exec'
+
+/* Plain-text emoji map (safe for email body) */
+var EMOJI_RAW = {
+  seed:'\uD83C\uDF31', explorer:'\uD83D\uDD2D', strategist:'\uD83D\uDDFA\uFE0F',
+  connector:'\uD83E\uDD1D', pioneer:'\uD83D\uDE80', champion:'\uD83C\uDFC6'
+};
+
+/* ---- QR SVG generator (simple placeholder pattern) ---- */
+function qrSVG(color) {
+  /* Renders a stylised QR-pattern placeholder in the given accent colour.
+     Replace the innerHTML of .qr-placeholder with a real QR image/canvas
+     once you have the actual URLs. */
+  var c = color || '#333';
+  var cells = [
+    [1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,1],
+    [1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1],
+    [1,0,1,1,1,0,1,0,0,1,1,0,1,1,1,0,1],
+    [1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1],
+    [1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1],
+    [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+    [1,0,1,1,0,1,1,1,1,0,1,0,1,1,0,1,1],
+    [0,1,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0],
+    [1,1,1,1,1,1,1,0,1,0,1,1,1,0,1,1,0],
+    [0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,1],
+    [1,1,1,1,1,1,1,0,0,0,1,0,1,0,1,0,1],
+    [1,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0],
+    [1,0,1,1,1,0,1,0,0,0,1,0,1,0,1,0,1],
+    [1,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0],
+    [1,1,1,1,1,1,1,0,0,0,1,0,1,0,1,1,1]
+  ];
+  var size = 72; var n = cells.length; var cell = size / n;
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">';
+  svg += '<rect width="' + size + '" height="' + size + '" fill="white" rx="6"/>';
+  for (var r = 0; r < n; r++) {
+    for (var cc = 0; cc < n; cc++) {
+      if (cells[r][cc]) {
+        svg += '<rect x="' + (cc * cell) + '" y="' + (r * cell) + '" width="' + cell + '" height="' + cell + '" fill="' + c + '"/>';
+      }
+    }
+  }
+  svg += '</svg>';
+  return svg;
+}
+
+/* ---- DATA ---- */
+var MILESTONES = [
+  {
+    id: 'validate_problem', stepNum: 1, label: 'Milestone 1 of 4',
+    question: 'Is your idea backed by a real, measurable problem?',
+    subtitle: 'Have you seen data or evidence that confirms this is a genuine issue?',
+    yes: { label: 'Yes, I have evidence',          icon: '&#x2705;' },
+    no:  { label: 'I\'m not sure yet',              icon: '&#x1F50D;' },
+    resource: {
+      title: 'Validate Your Problem First',
+      body: 'A strong CW project starts with solid evidence. Without data it\'s hard to know if the problem is real or how big it is.',
+      box: { title: '&#x1F4CA; Data &amp; How to Get It', desc: 'Learn how to gather the right data to confirm your problem and build your case.' }
+    },
+    character: 'explorer',
+    summaryOk:  'Problem validated with data',
+    summaryGap: 'Get data to confirm your problem'
+  },
+  {
+    id: 'know_qi', stepNum: 2, label: 'Milestone 2 of 4',
+    question: 'Have you reviewed the CW QI methodology?',
+    subtitle: 'Even a partial read helps — this resource is for everyone.',
+    yes: { label: 'Yes, I know it well',  icon: '&#x2705;' },
+    no:  { label: 'Not fully yet',        icon: '&#x1F4D6;' },
+    resource: null, /* handled specially — always shown */
+    character: 'strategist',
+    summaryOk:  'Familiar with CW QI method',
+    summaryGap: 'Review the CW &amp; QI Playbook'
+  },
+  {
+    id: 'have_team', stepNum: 3, label: 'Milestone 3 of 4',
+    question: 'Do you have the right team around you?',
+    subtitle: 'Does your team include the key people needed to drive this change?',
+    yes: { label: 'Yes, my team is ready',    icon: '&#x2705;' },
+    no:  { label: 'I need help building one', icon: '&#x1F91D;' },
+    resource: {
+      title: 'Build Your Change Team',
+      body: 'The right team makes the difference. Think beyond your immediate circle \u2014 you need clinical leads, data support, and frontline voices.',
+      tips: [
+        'Clinical lead or champion in the relevant specialty',
+        'Someone with data / audit access',
+        'A frontline clinician who feels the problem daily',
+        'A manager who can unblock barriers'
+      ]
+    },
+    character: 'connector',
+    summaryOk:  'Team is ready',
+    summaryGap: 'Build the right team around you'
+  },
+  {
+    id: 'registered', stepNum: 4, label: 'Milestone 4 of 4',
+    question: 'Have you registered your project?',
+    subtitle: 'Is your CW project officially logged so it can be supported?',
+    yes: { label: 'Yes, it\'s registered!',   icon: '&#x1F3C1;' },
+    no:  { label: 'Not yet \u2014 how do I?', icon: '&#x1F4CB;' },
+    resource: {
+      title: 'Register Your Project',
+      body: 'Registering makes it real. It connects you to support, tracks your progress, and puts your work on the map.',
+      box: { title: '&#x1F4CB; Register Your CW Project', desc: 'Submit your project details to get official support and visibility from the CW team.' }
+    },
+    character: 'pioneer',
+    summaryOk:  'Project registered',
+    summaryGap: 'Register your project to get support'
+  }
+];
+
+var DOMAINS = [
+  { label: 'Diagnostics',       cls: 'd1' },
+  { label: 'Medications',       cls: 'd2' },
+  { label: 'Procedures',        cls: 'd3' },
+  { label: 'Referrals',         cls: 'd4' },
+  { label: 'Hospital Stays',    cls: 'd5' }
+];
+
+var CHARS = {
+  seed:       { emoji:'&#x1F331;', name:'The Seedling',   tagline:'Every champion starts with a single observation.',             nudge:'Keep noticing. Your idea is on its way.',                  bg:'#d8f3dc', border:'#52b788', color:'#2d6a4f' },
+  explorer:   { emoji:'&#x1F52D;', name:'The Explorer',   tagline:'You see the possibility \u2014 now find the evidence.',         nudge:'Data is your compass. Follow it.',                          bg:'#d6eaf8', border:'#2e86c1', color:'#1b4f72' },
+  strategist: { emoji:'&#x1F5FA;', name:'The Strategist', tagline:'The problem is clear. Now build the plan.',                    nudge:'The playbook is your blueprint. Use it.',                   bg:'#e8daef', border:'#9b59b6', color:'#6c3483' },
+  connector:  { emoji:'&#x1F91D;', name:'The Connector',  tagline:'Great ideas need great people behind them.',                    nudge:'Rally your crew \u2014 change is a team sport.',            bg:'#fdebd0', border:'#e59866', color:'#784212' },
+  pioneer:    { emoji:'&#x1F680;', name:'The Pioneer',    tagline:'You\'re almost there. Plant your flag.',                        nudge:'One registration stands between you and liftoff.',          bg:'#d6eaf8', border:'#2471a3', color:'#1a5276' },
+  champion:   { emoji:'&#x1F3C6;', name:'The Champion',   tagline:'You\'re not waiting for change \u2014 you ARE the change.',     nudge:'Keep going. The system is better because of you.',          bg:'#fef9e7', border:'#f4d03f', color:'#7d6608' }
+};
+
+/* ---- STATE ---- */
+var phase        = 'start';
+var milestoneIdx = 0;
+var answers      = [];        // true/false per milestone
+var firstGapChar = null;
+var showRes      = false;     // showing resource mid-flow?
+var isQIStep     = false;     // special QI always-show step
+
+var card = document.getElementById('card');
+
+/* ---- HELPERS ---- */
+function mkEl(tag, cls, html) {
+  var n = document.createElement(tag);
+  if (cls)             n.className = cls;
+  if (html !== undefined) n.innerHTML = html;
+  return n;
+}
+function animate() { card.classList.remove('animate'); void card.offsetWidth; card.classList.add('animate'); }
+
+function pct() {
+  if (phase === 'start') return 0;
+  if (phase === 'card' || phase === 'done') return 100;
+  var base = Math.round(((milestoneIdx + (showRes ? 0.6 : 0)) / 4) * 88) + 6;
+  return Math.min(95, base);
+}
+function makeProgress() {
+  var w = mkEl('div','progress-wrap');
+  var l = mkEl('div','progress-labels');
+  l.appendChild(mkEl('span',null,'PROGRESS')); l.appendChild(mkEl('span',null,pct()+'%'));
+  var t = mkEl('div','progress-track'); var f = mkEl('div','progress-fill'); f.style.width = pct()+'%';
+  t.appendChild(f); w.appendChild(l); w.appendChild(t); return w;
+}
+function makeStepper() {
+  var wrap = mkEl('div','stepper');
+  for (var i = 0; i < 4; i++) {
+    var dot = mkEl('div','step-dot');
+    if (i < answers.length) {
+      dot.className = 'step-dot ' + (answers[i] ? 'done' : 'flagged');
+      dot.innerHTML = answers[i] ? '&#x2713;' : '!';
+    } else if (i === milestoneIdx && !showRes) {
+      dot.className = 'step-dot active'; dot.innerHTML = String(i+1);
+    } else {
+      dot.innerHTML = String(i+1);
+    }
+    wrap.appendChild(dot);
+    if (i < 3) {
+      var line = mkEl('div','step-line');
+      if (i < answers.length - 1 || (i < answers.length && showRes)) line.className = 'step-line done';
+      wrap.appendChild(line);
+    }
+  }
+  return wrap;
+}
+
+function playbookPair() {
+  var pair = mkEl('div','playbook-pair');
+  var cw = mkEl('div','pb-box cw');
+  cw.appendChild(mkEl('div','pb-label','CW RESOURCE'));
+  cw.appendChild(mkEl('div','pb-title','&#x1F4D7; Choose Wisely Playbook'));
+  cw.appendChild(mkEl('div','pb-desc','Your guide to choosing care that truly matters \u2014 frameworks, evidence summaries, and conversation tools.'));
+  pair.appendChild(cw);
+  var qi = mkEl('div','pb-box qi');
+  qi.appendChild(mkEl('div','pb-label','QI RESOURCE'));
+  qi.appendChild(mkEl('div','pb-title','&#x1F4D8; QI Playbook'));
+  qi.appendChild(mkEl('div','pb-desc','Step-by-step Quality Improvement guidance \u2014 scoping, PDSA cycles, measurement, and sustaining change.'));
+  pair.appendChild(qi);
+  return pair;
+}
+
+/* ---- RENDER: START ---- */
+function renderStart() {
+  card.innerHTML = ''; animate();
+  card.appendChild(mkEl('div','step-label','Choose your path'));
+  card.appendChild(mkEl('div','question','Do you have a Choose Wisely project idea?'));
+  card.appendChild(mkEl('p','subtitle','Something in your workplace you\'d love to improve or fix'));
+  var opts = mkEl('div','options');
+
+  function makeOpt(iconHtml, label, onClick) {
+    var btn = mkEl('button','option-btn');
+    var ic = mkEl('span','opt-icon'); ic.innerHTML = iconHtml;
+    btn.appendChild(ic); btn.appendChild(mkEl('span',null,label));
+    btn.appendChild(mkEl('span','opt-arrow','&#x2192;'));
+    btn.addEventListener('click', onClick); return btn;
+  }
+  opts.appendChild(makeOpt('&#x1F4A1;','Yes, I have an idea!', function() {
+    phase='milestone'; milestoneIdx=0; answers=[]; firstGapChar=null; showRes=false; render();
+  }));
+  opts.appendChild(makeOpt('&#x1F914;','Not yet\u2026', function() {
+    phase='no_idea'; render();
+  }));
+  card.appendChild(opts);
+}
+
+/* ---- RENDER: NO IDEA ---- */
+function renderNoIdea() {
+  card.innerHTML = ''; animate();
+  card.appendChild(mkEl('div','step-label','Your next move'));
+  card.appendChild(mkEl('div','res-title','Start Where You Are'));
+  card.appendChild(mkEl('p','res-body','Change begins with awareness. Before a project idea takes shape, the most powerful thing you can do is practise thoughtful decision-making in your everyday work.'));
+  var ul = mkEl('ul','tips');
+  ['Notice recurring friction or inefficiencies around you',
+   'Ask yourself: is this the best way, or just the familiar way?',
+   'Start journalling small observations \u2014 they become big ideas'].forEach(function(t){ul.appendChild(mkEl('li',null,t));});
+  card.appendChild(ul);
+
+  /* Both playbooks shown here */
+  card.appendChild(mkEl('div','step-label','RESOURCES FOR YOU'));
+  card.appendChild(playbookPair());
+
+  /* Journey preview */
+  card.appendChild(mkEl('div','divider'));
+  card.appendChild(mkEl('div','step-label','THE FULL JOURNEY AHEAD'));
+  var preview = mkEl('div','summary-items');
+  ['Validate the problem with data',
+   'Review the CW &amp; QI method',
+   'Build the right team',
+   'Register your project'
+  ].forEach(function(l, i) {
+    var item = mkEl('div','summary-item unknown');
+    var ic = mkEl('span','si-icon'); ic.innerHTML = String(i+1);
+    item.appendChild(ic);
+    item.appendChild(mkEl('div','si-label', l));
+    preview.appendChild(item);
+  });
+  card.appendChild(preview);
+
+  var cta = mkEl('button','btn-continue','See my character &#x2192;');
+  cta.addEventListener('click', function(){ firstGapChar='seed'; phase='summary_noidea'; render(); });
+  card.appendChild(cta);
+}
+
+/* ---- RENDER: MILESTONE QUESTION ---- */
+function renderMilestone() {
+  var m = MILESTONES[milestoneIdx];
+  showRes = false; isQIStep = (m.id === 'know_qi');
+  card.innerHTML = ''; animate();
+  card.appendChild(makeProgress()); card.appendChild(makeStepper());
+  card.appendChild(mkEl('div','step-label', m.label));
+  card.appendChild(mkEl('div','question', m.question));
+  card.appendChild(mkEl('p','subtitle', m.subtitle));
+
+  var opts = mkEl('div','options');
+  function makeOpt(iconHtml, label, onClick) {
+    var btn = mkEl('button','option-btn');
+    var ic = mkEl('span','opt-icon'); ic.innerHTML = iconHtml;
+    btn.appendChild(ic); btn.appendChild(mkEl('span',null,label));
+    btn.appendChild(mkEl('span','opt-arrow','&#x2192;'));
+    btn.addEventListener('click', onClick); return btn;
+  }
+  opts.appendChild(makeOpt(m.yes.icon, m.yes.label, function(){ answer(true); }));
+  opts.appendChild(makeOpt(m.no.icon,  m.no.label,  function(){ answer(false); }));
+  card.appendChild(opts);
+}
+
+/* ---- RENDER: RESOURCE (mid-flow) ---- */
+function renderResource() {
+  var m = MILESTONES[milestoneIdx];
+  var r = m.resource;
+  showRes = true;
+  card.innerHTML = ''; animate();
+  card.appendChild(makeProgress()); card.appendChild(makeStepper());
+
+  var rh = mkEl('div','res-header');
+  rh.innerHTML = '&#x1F4CC;&nbsp;';
+  rh.appendChild(mkEl('span',null,'RESOURCE FLAGGED FOR YOU'));
+  card.appendChild(rh);
+
+  card.appendChild(mkEl('div','res-title', r.title));
+  card.appendChild(mkEl('p','res-body', r.body));
+  if (r.tips) {
+    var ul = mkEl('ul','tips');
+    r.tips.forEach(function(t){ul.appendChild(mkEl('li',null,t));});
+    card.appendChild(ul);
+  }
+  if (r.box) {
+    var box = mkEl('div','res-box');
+    box.appendChild(mkEl('div','rb-title', r.box.title));
+    box.appendChild(mkEl('div','rb-desc',  r.box.desc));
+    card.appendChild(box);
+  }
+
+  var isLast = (milestoneIdx === MILESTONES.length - 1);
+  card.appendChild(mkEl('p','continue-note', isLast ? 'Let\'s see your full results \u2192' : 'Keep going \u2014 see the rest of the journey \u2192'));
+  var cta = mkEl('button','btn-continue', isLast ? 'See my results &#x2192;' : 'Next milestone &#x2192;');
+  cta.addEventListener('click', function(){
+    showRes = false;
+    milestoneIdx++;
+    if (milestoneIdx >= MILESTONES.length) phase = 'summary';
+    else phase = 'milestone';
+    render();
+  });
+  card.appendChild(cta);
+}
+
+/* ---- RENDER: QI RESOURCE (always shown regardless of answer) ---- */
+function renderQIResource() {
+  showRes = true;
+  card.innerHTML = ''; animate();
+  card.appendChild(makeProgress()); card.appendChild(makeStepper());
+
+  var rh = mkEl('div','res-header');
+  rh.innerHTML = '&#x1F4D8;&nbsp;';
+  rh.appendChild(mkEl('span',null,'FOR EVERYONE'));
+  card.appendChild(rh);
+
+  card.appendChild(mkEl('div','res-title','Your CW &amp; QI Toolkit'));
+  card.appendChild(mkEl('p','res-body','Whether you know the method well or are just getting started, these two resources cover every stage of your project. Scan the QR codes on the summary screen to access them.'));
+
+  card.appendChild(playbookPair());
+
+  var isLast = (milestoneIdx === MILESTONES.length - 1);
+  card.appendChild(mkEl('p','continue-note', isLast ? 'Let\'s see your full results \u2192' : 'Keep going \u2014 see the rest of the journey \u2192'));
+  var cta = mkEl('button','btn-continue', isLast ? 'See my results &#x2192;' : 'Next milestone &#x2192;');
+  cta.addEventListener('click', function(){
+    showRes = false;
+    milestoneIdx++;
+    if (milestoneIdx >= MILESTONES.length) phase = 'summary';
+    else phase = 'milestone';
+    render();
+  });
+  card.appendChild(cta);
+}
+
+/* ---- RENDER: SUMMARY (with idea and then also QR codes) ---- */
+function renderSummary(noIdea) {
+  var c = CHARS[firstGapChar];
+  card.innerHTML = ''; animate();
+
+  var allYes = !noIdea && answers.every(function(a){return a;});
+
+  var grid = mkEl('div','final-grid');
+
+  /* ---- LEFT: character ---- */
+  var left = mkEl('div','final-left');
+  var emo = mkEl('div','final-emoji'); emo.innerHTML = c.emoji; left.appendChild(emo);
+  left.appendChild(mkEl('div','final-youare','YOU ARE'));
+  left.appendChild(mkEl('div','final-name', c.name));
+  left.appendChild(mkEl('p','final-tagline','\u201c'+c.tagline+'\u201d'));
+  var nudge = mkEl('div','final-nudge');
+  nudge.style.cssText = 'background:'+c.bg+';border:2px solid '+c.border;
+  var nl = mkEl('div','fn-label','YOUR NUDGE'); nl.style.color=c.color;
+  var nt = mkEl('div','fn-text', c.nudge); nt.style.color=c.color;
+  nudge.appendChild(nl); nudge.appendChild(nt); left.appendChild(nudge);
+  grid.appendChild(left);
+
+  /* ---- RIGHT ---- */
+  var right = mkEl('div','final-right');
+
+  /* section label */
+  right.appendChild(mkEl('div','step-label', noIdea ? 'YOUR JOURNEY AHEAD' : (allYes ? 'YOUR ROADMAP' : 'HERE\u2019S WHERE YOU\u2019RE AT')));
+
+  /* milestone rows */
+  var rows = mkEl('div','sum-rows');
+  if (noIdea) {
+    ['Validate the problem with data',
+     'Review the CW &amp; QI method',
+     'Build the right team',
+     'Register your project'
+    ].forEach(function(l){
+      var row = mkEl('div','sum-row unknown');
+      var ic = mkEl('span','sr-icon','&#x25CB;'); row.appendChild(ic);
+      row.appendChild(mkEl('span',null,l)); rows.appendChild(row);
+    });
+  } else {
+    MILESTONES.forEach(function(m,i){
+      var ok = answers[i];
+      var row = mkEl('div','sum-row '+(ok?'ok':'gap'));
+      var ic = mkEl('span','sr-icon'); ic.innerHTML = ok ? '&#x2705;' : '&#x26A0;&#xFE0F;';
+      row.appendChild(ic);
+      row.appendChild(mkEl('span',null, ok ? m.summaryOk : m.summaryGap));
+      rows.appendChild(row);
+    });
+  }
+  right.appendChild(rows);
+
+  /* QR codes */
+  right.appendChild(mkEl('div','step-label','SCAN FOR RESOURCES'));
+  var qrRow = mkEl('div','qr-row');
+
+  var qm1 = mkEl('div','qr-mini qi');
+  var qs1 = document.createElement('div'); qs1.style.cssText='width:44px;height:44px;flex-shrink:0'; qs1.innerHTML=qrSVG('#4c1d95').replace('width="72" height="72"','width="44" height="44"').replace('viewBox="0 0 72 72"','viewBox="0 0 72 72"');
+  var qt1 = mkEl('div','qr-mini-text'); qt1.appendChild(mkEl('div','qmt-title','QI Playbook')); qt1.appendChild(mkEl('div','qmt-sub','Methodology guide'));
+  qm1.appendChild(qs1); qm1.appendChild(qt1); qrRow.appendChild(qm1);
+
+  var qm2 = mkEl('div','qr-mini cw');
+  var qs2 = document.createElement('div'); qs2.style.cssText='width:44px;height:44px;flex-shrink:0'; qs2.innerHTML=qrSVG('#1a56db').replace('width="72" height="72"','width="44" height="44"').replace('viewBox="0 0 72 72"','viewBox="0 0 72 72"');
+  var qt2 = mkEl('div','qr-mini-text'); qt2.appendChild(mkEl('div','qmt-title','CW Resources')); qt2.appendChild(mkEl('div','qmt-sub','Tools &amp; templates'));
+  qm2.appendChild(qs2); qm2.appendChild(qt2); qrRow.appendChild(qm2);
+
+  right.appendChild(qrRow);
+
+  /* idea board */
+  var board = mkEl('div','idea-mini');
+  if (noIdea) {
+    board.appendChild(mkEl('div','im-title','&#x1F4DD; Write your reflection'));
+    board.appendChild(mkEl('div','im-body','Jot down one thing you’ve noticed in your work on a sticky note. Place it on the <strong>Seedling board</strong>.'));
+  } else {
+    board.appendChild(mkEl('div','im-title','&#x1F4CB; Pin your idea to the board'));
+    board.appendChild(mkEl('div','im-body','Write your project idea and place it under its domain:'));
+    var tags = mkEl('div','domain-tags-mini');
+    DOMAINS.forEach(function(d){ tags.appendChild(mkEl('span','domain-tag-mini '+d.cls, d.label)); });
+    board.appendChild(tags);
+  }
+  right.appendChild(board);
+
+  /* email capture */
+  var esec = mkEl('div','email-section');
+  esec.appendChild(mkEl('div','step-label','GET YOUR SUMMARY BY EMAIL'));
+  var erow = mkEl('div','email-row');
+  var einput = mkEl('input','email-input');
+  einput.type='email'; einput.placeholder='your@email.com'; einput.id='summary-email-input';
+  var esend = mkEl('button','email-send-btn','Send \u2709');
+  erow.appendChild(einput); erow.appendChild(esend);
+  var emeta = mkEl('div','email-meta');
+  var estatus = mkEl('div','email-status'); estatus.id='email-status';
+  var ecopy = mkEl('button','email-copy-btn','Copy summary');
+  emeta.appendChild(estatus); emeta.appendChild(ecopy);
+  esec.appendChild(erow); esec.appendChild(emeta);
+  right.appendChild(esec);
+
+  esend.addEventListener('click', function(){
+    var val = einput.value.trim();
+    if (!val || val.indexOf('@') < 1) { showEmailStatus('Enter a valid email address','err'); return; }
+    sendSummaryEmail(val, noIdea, esend);
+  });
+  einput.addEventListener('keydown', function(e){
+    if (e.key==='Enter') esend.click();
+  });
+  ecopy.addEventListener('click', function(){ copySummary(noIdea, ecopy); });
+
+  /* buttons */
+  var btns = mkEl('div','final-btns');
+  var back = mkEl('button','btn-ghost','&#x21A9; Start over');
+  var done = mkEl('button','btn-primary','Done! &#x1F389;');
+  back.addEventListener('click', doRestart);
+  done.addEventListener('click', function(){ phase='done'; render(); });
+  btns.appendChild(back); btns.appendChild(done);
+  right.appendChild(btns);
+
+  grid.appendChild(right);
+  card.appendChild(grid);
+}
+
+/* renderCharCard now just calls renderSummary — kept for safety */
+function renderCharCard() { renderSummary(false); }
+
+/* ---- RENDER: DONE ---- */
+function renderDone() {
+  card.innerHTML = ''; animate();
+  var wrap = mkEl('div','thankyou');
+  wrap.appendChild(mkEl('div','ty-emoji','&#x1F64C;'));
+  wrap.appendChild(mkEl('div','ty-title','Thanks for playing!'));
+  wrap.appendChild(mkEl('p','ty-body','Don\'t forget to add your sticky note to the board.<br><strong>Every idea counts.</strong>'));
+  var btn = mkEl('button','btn-continue','Play again &#x21A9;');
+  btn.style.cssText='max-width:240px;margin:0 auto;display:block';
+  btn.addEventListener('click', doRestart); wrap.appendChild(btn);
+  card.appendChild(wrap);
+}
+
+/* ---- ANSWER LOGIC ---- */
+function answer(isYes) {
+  answers.push(isYes);
+  if (!isYes && firstGapChar === null) firstGapChar = MILESTONES[milestoneIdx].character;
+
+  var m = MILESTONES[milestoneIdx];
+
+  // QI milestone: ALWAYS show playbook resource regardless of answer
+  if (m.id === 'know_qi') {
+    phase = 'qi_resource';
+    render(); return;
+  }
+
+  if (!isYes) {
+    phase = 'resource'; render();
+  } else {
+    milestoneIdx++;
+    if (milestoneIdx >= MILESTONES.length) {
+      if (!firstGapChar) firstGapChar = 'champion';
+      phase = 'summary';
+    } else {
+      phase = 'milestone';
+    }
+    render();
+  }
+}
+
+function doRestart() {
+  phase='start'; milestoneIdx=0; answers=[]; firstGapChar=null; showRes=false; isQIStep=false; render();
+}
+
+
+/* ---- EMAIL HELPERS ---- */
+function buildSummaryText(noIdea) {
+  var c     = CHARS[firstGapChar];
+  var emoji = EMOJI_RAW[firstGapChar] || '';
+  var sep   = '\n' + '─'.repeat(44) + '\n';
+  var lines = [];
+  lines.push('Choose Wisely Booth Activity – Your Summary');
+  lines.push(sep);
+  lines.push('YOU ARE: ' + emoji + ' ' + c.name.toUpperCase());
+  lines.push('\u201c' + c.tagline + '\u201d');
+  lines.push('\nYour nudge: ' + c.nudge);
+  lines.push(sep);
+  if (noIdea) {
+    lines.push('YOUR JOURNEY AHEAD');
+    lines.push('');
+    ['Validate the problem with data',
+     'Review the CW & QI method',
+     'Build the right team',
+     'Register your project'
+    ].forEach(function(l){ lines.push('  \u25CB  ' + l); });
+  } else {
+    lines.push('YOUR ROADMAP');
+    lines.push('');
+    MILESTONES.forEach(function(m,i){
+      var ok = answers[i];
+      lines.push((ok ? '  \u2705  ' : '  \u26A0\uFE0F  ') + (ok ? m.summaryOk : m.summaryGap));
+    });
+  }
+  lines.push(sep);
+  lines.push('RESOURCES');
+  lines.push('');
+  lines.push('\uD83D\uDCD7  CW Playbook:      [Paste your URL here]');
+  lines.push('\uD83D\uDCD8  QI Playbook:      [Paste your URL here]');
+  lines.push('\uD83D\uDCCA  CW Resources Hub: [Paste your URL here]');
+  lines.push(sep);
+  lines.push('Keep choosing wisely! \u2728');
+  lines.push('\u2014 The Choose Wisely Team');
+  return lines.join('\n');
+}
+
+function copySummary(noIdea, btn) {
+  var text = buildSummaryText(noIdea);
+  var status = document.getElementById('email-status');
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){
+        if (btn) btn.textContent = 'Copied! \u2713';
+        showEmailStatus('Summary copied to clipboard', 'ok');
+        setTimeout(function(){ if (btn) btn.textContent = 'Copy summary'; }, 2500);
+      });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      if (btn) btn.textContent = 'Copied! \u2713';
+      showEmailStatus('Summary copied to clipboard', 'ok');
+      setTimeout(function(){ if (btn) btn.textContent = 'Copy summary'; }, 2500);
+    }
+  } catch(e) { showEmailStatus('Could not copy — try again', 'err'); }
+}
+
+function showEmailStatus(msg, cls) {
+  var el = document.getElementById('email-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'email-status ' + (cls || '');
+  setTimeout(function(){ if (el.textContent === msg) el.textContent = ''; }, 4000);
+}
+
+function sendSummaryEmail(email, noIdea, sendBtn) {
+  if (!GAS_URL) {
+    showEmailStatus('Email not configured — use Copy instead', 'err');
+    return;
+  }
+  var c = CHARS[firstGapChar];
+  sendBtn.disabled = true;
+  sendBtn.textContent = 'Sending…';
+
+  fetch(GAS_URL, {
+    method:  'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body:    JSON.stringify({
+      to_email:       email,
+      character_name: c.name,
+      message:        buildSummaryText(noIdea)
+    })
+  })
+  .then(function(r) { return r.text(); })
+  .then(function(text) {
+    sendBtn.disabled = false;
+    sendBtn.innerHTML = 'Send &#x2709;';
+    var ok = false;
+    try { ok = JSON.parse(text).status === 'ok'; } catch(e) { ok = true; }
+    if (ok) {
+      showEmailStatus('\u2705 Sent! Check your inbox.', 'ok');
+      document.getElementById('summary-email-input').value = '';
+    } else {
+      showEmailStatus('Could not send — check the address and try again', 'err');
+    }
+  })
+  .catch(function() {
+    sendBtn.disabled = false;
+    sendBtn.innerHTML = 'Send &#x2709;';
+    showEmailStatus('Network error — use Copy instead', 'err');
+  });
+}
+
+/* ---- MAIN RENDER ---- */
+function render() {
+  if (phase==='start')           { renderStart();           return; }
+  if (phase==='no_idea')         { renderNoIdea();          return; }
+  if (phase==='milestone')       { renderMilestone();       return; }
+  if (phase==='resource')        { renderResource();        return; }
+  if (phase==='qi_resource')     { renderQIResource();      return; }
+  if (phase==='summary')         { renderSummary(false);    return; }
+  if (phase==='summary_noidea')  { renderSummary(true);     return; }
+  if (phase==='card')            { renderCharCard();        return; }
+  if (phase==='done')            { renderDone();            return; }
+}
+
+render();
+</script>
+</body>
+</html>
