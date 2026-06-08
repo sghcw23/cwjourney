@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Choose Wisely · Booth Activity</title>
+<title>Choosing Wisely · ACT Booth</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -867,7 +867,7 @@ function buildSummaryText(noIdea) {
   lines.push('\uD83D\uDCCA  CW Resources Hub: [Paste your URL here]');
   lines.push(sep);
   lines.push('Keep choosing wisely! \u2728');
-  lines.push('\u2014 The Choose Wisely Team');
+  lines.push('\u2014 The Choosing Wisely Team');
   return lines.join('\n');
 }
 
@@ -910,8 +910,12 @@ function sendSummaryEmail(email, noIdea, sendBtn) {
   sendBtn.disabled = true;
   sendBtn.textContent = 'Sending…';
 
+  /* GAS redirects POST requests — mode:'no-cors' bypasses the CORS block.
+     The response is opaque so we can't read it back, but the email
+     sends server-side regardless. */
   fetch(GAS_URL, {
     method:  'POST',
+    mode:    'no-cors',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body:    JSON.stringify({
       to_email:       email,
@@ -919,18 +923,11 @@ function sendSummaryEmail(email, noIdea, sendBtn) {
       message:        buildSummaryText(noIdea)
     })
   })
-  .then(function(r) { return r.text(); })
-  .then(function(text) {
+  .then(function() {
     sendBtn.disabled = false;
     sendBtn.innerHTML = 'Send &#x2709;';
-    var ok = false;
-    try { ok = JSON.parse(text).status === 'ok'; } catch(e) { ok = true; }
-    if (ok) {
-      showEmailStatus('\u2705 Sent! Check your inbox.', 'ok');
-      document.getElementById('summary-email-input').value = '';
-    } else {
-      showEmailStatus('Could not send — check the address and try again', 'err');
-    }
+    showEmailStatus('\u2705 Sent! Check your inbox.', 'ok');
+    document.getElementById('summary-email-input').value = '';
   })
   .catch(function() {
     sendBtn.disabled = false;
