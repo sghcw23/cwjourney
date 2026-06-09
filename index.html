@@ -157,11 +157,11 @@
     font-size: 11px; font-weight: 700; font-family: 'DM Mono', monospace;
     padding: 4px 10px; border-radius: 99px; border: 1.5px solid;
   }
-  .domain-tag.d1 { background: #dbeafe; border-color: #93c5fd; color: #1e40af; }
-  .domain-tag.d2 { background: #dcfce7; border-color: #86efac; color: #166534; }
-  .domain-tag.d3 { background: #fce7f3; border-color: #f9a8d4; color: #9d174d; }
-  .domain-tag.d4 { background: #fef9c3; border-color: #fde047; color: #854d0e; }
-  .domain-tag.d5 { background: #f3e8ff; border-color: #d8b4fe; color: #6b21a8; }
+  .domain-tag.d1 { background: #ffe4af; border-color: #9b928e; color: #000000; }
+  .domain-tag.d2 { background: #dfefdd; border-color: #9b928e; color: #000000; }
+  .domain-tag.d3 { background: #dad9eb; border-color: #9b928e; color: #000000; }
+  .domain-tag.d4 { background: #b8e1ee; border-color: #9b928e; color: #000000; }
+  .domain-tag.d5 { background: #f3e8ff; border-color: #9b928e; color: #000000; }
 
   /* char card */
   .char-card    { text-align: center; }
@@ -294,11 +294,11 @@
 <body>
 <div class="wrapper">
   <div class="header">
-    <div class="badge"><span class="dot"></span> CHOOSE WISELY &middot; BOOTH ACTIVITY</div>
+    <div class="badge"><span class="dot"></span> CHOOSING WISELY &middot; BOOTH ACTIVITY</div>
     <h1>Where Are You<br>in Your Journey?</h1>
   </div>
   <div class="card" id="card"></div>
-  <p class="footer">~5 min activity &middot; Scan QR for resources</p>
+  <p class="footer">~5 min activity &middot; Links to resources</p>
 </div>
 
 <script>
@@ -377,18 +377,18 @@ var MILESTONES = [
   },
   {
     id: 'know_qi', stepNum: 2, label: 'Milestone 2 of 4',
-    question: 'Have you reviewed the CW QI methodology?',
-    subtitle: 'Even a partial read helps — this resource is for everyone.',
+    question: 'Are you familiar with Choosing Wisely & QI methodology?',
+    subtitle: 'Practical tools to help you along your project journey — this resource is for everyone.',
     yes: { label: 'Yes, I know it well',  icon: '&#x2705;' },
     no:  { label: 'Not fully yet',        icon: '&#x1F4D6;' },
     resource: null, /* handled specially — always shown */
     character: 'strategist',
     summaryOk:  'Familiar with CW QI method',
-    summaryGap: 'Review the CW &amp; QI Playbook'
+    summaryGap: 'Learn the Choosing Wisely &amp; QI method'
   },
   {
     id: 'have_team', stepNum: 3, label: 'Milestone 3 of 4',
-    question: 'Do you have the right team around you?',
+    question: 'Do you have the right team?',
     subtitle: 'Does your team include the key people needed to drive this change?',
     yes: { label: 'Yes, my team is ready',    icon: '&#x2705;' },
     no:  { label: 'I need help building one', icon: '&#x1F91D;' },
@@ -408,14 +408,13 @@ var MILESTONES = [
   },
   {
     id: 'registered', stepNum: 4, label: 'Milestone 4 of 4',
-    question: 'Have you registered your project?',
-    subtitle: 'Is your CW project officially logged so it can be supported?',
+    question: 'Have you registered your Choosing Wisely QI project?',
+    subtitle: 'Is your project officially registered so it can be supported?',
     yes: { label: 'Yes, it\'s registered!',   icon: '&#x1F3C1;' },
     no:  { label: 'Not yet \u2014 how do I?', icon: '&#x1F4CB;' },
     resource: {
       title: 'Register Your Project',
-      body: 'Registering makes it real. It connects you to support, tracks your progress, and puts your work on the map.',
-      box: { title: '&#x1F4CB; Register Your CW Project', desc: 'Submit your project details to get official support and visibility from the CW team.' }
+      box: { title: '&#x1F4CB; Register Your CW Project', desc: 'Register your Choosing Wisely QI project in the SingHealth Improvement Portal. Registering your QI project connects you with dedicated support to help you succeed.' }
     },
     character: 'pioneer',
     summaryOk:  'Project registered',
@@ -424,11 +423,11 @@ var MILESTONES = [
 ];
 
 var DOMAINS = [
-  { label: 'Diagnostics',       cls: 'd1' },
-  { label: 'Medications',       cls: 'd2' },
-  { label: 'Procedures',        cls: 'd3' },
-  { label: 'Referrals',         cls: 'd4' },
-  { label: 'Hospital Stays',    cls: 'd5' }
+  { label: 'Using Labs Wisely',       cls: 'd1' },
+  { label: 'Using Medications Wisely',       cls: 'd2' },
+  { label: 'Using Imaging Wisely',        cls: 'd3' },
+  { label: 'Using Referrals Wisely',         cls: 'd4' },
+  { label: 'Others',    cls: 'd5' }
 ];
 
 var CHARS = {
@@ -498,7 +497,7 @@ function playbookPair() {
   var pair = mkEl('div','playbook-pair');
   var cw = mkEl('div','pb-box cw');
   cw.appendChild(mkEl('div','pb-label','CW RESOURCE'));
-  cw.appendChild(mkEl('div','pb-title','&#x1F4D7; Choose Wisely Playbook'));
+  cw.appendChild(mkEl('div','pb-title','&#x1F4D7; Choosing Wisely Playbook'));
   cw.appendChild(mkEl('div','pb-desc','Your guide to choosing care that truly matters \u2014 frameworks, evidence summaries, and conversation tools.'));
   pair.appendChild(cw);
   var qi = mkEl('div','pb-box qi');
@@ -513,7 +512,7 @@ function playbookPair() {
 function renderStart() {
   card.innerHTML = ''; animate();
   card.appendChild(mkEl('div','step-label','Choose your path'));
-  card.appendChild(mkEl('div','question','Do you have a Choose Wisely project idea?'));
+  card.appendChild(mkEl('div','question','Do you have a Choosing Wisely project idea?'));
   card.appendChild(mkEl('p','subtitle','Something in your workplace you\'d love to improve or fix'));
   var opts = mkEl('div','options');
 
@@ -540,9 +539,9 @@ function renderNoIdea() {
   card.appendChild(mkEl('div','res-title','Start Where You Are'));
   card.appendChild(mkEl('p','res-body','Change begins with awareness. Before a project idea takes shape, the most powerful thing you can do is practise thoughtful decision-making in your everyday work.'));
   var ul = mkEl('ul','tips');
-  ['Notice recurring friction or inefficiencies around you',
+  ['See every decision as a chance to improve care',
    'Ask yourself: is this the best way, or just the familiar way?',
-   'Start journalling small observations \u2014 they become big ideas'].forEach(function(t){ul.appendChild(mkEl('li',null,t));});
+   'Learn from others and share what works'].forEach(function(t){ul.appendChild(mkEl('li',null,t));});
   card.appendChild(ul);
 
   /* Both playbooks shown here */
@@ -554,7 +553,7 @@ function renderNoIdea() {
   card.appendChild(mkEl('div','step-label','THE FULL JOURNEY AHEAD'));
   var preview = mkEl('div','summary-items');
   ['Validate the problem with data',
-   'Review the CW &amp; QI method',
+   'Learn the Choosing Wisely &amp; QI method',
    'Build the right team',
    'Register your project'
   ].forEach(function(l, i) {
@@ -646,7 +645,7 @@ function renderQIResource() {
   card.appendChild(rh);
 
   card.appendChild(mkEl('div','res-title','Your CW &amp; QI Toolkit'));
-  card.appendChild(mkEl('p','res-body','Whether you know the method well or are just getting started, these two resources cover every stage of your project. Scan the QR codes on the summary screen to access them.'));
+  card.appendChild(mkEl('p','res-body','Whether you are a Choosing Wisely or QI guru or are just getting started, these two resources cover every stage of your project.'));
 
   card.appendChild(playbookPair());
 
@@ -695,7 +694,7 @@ function renderSummary(noIdea) {
   var rows = mkEl('div','sum-rows');
   if (noIdea) {
     ['Validate the problem with data',
-     'Review the CW &amp; QI method',
+     'Learn the Choosing Wisely &amp; QI method',
      'Build the right team',
      'Register your project'
     ].forEach(function(l){
@@ -716,7 +715,7 @@ function renderSummary(noIdea) {
   right.appendChild(rows);
 
   /* QR codes */
-  right.appendChild(mkEl('div','step-label','SCAN FOR RESOURCES'));
+  right.appendChild(mkEl('div','step-label','LINKS TO RESOURCES'));
   var qrRow = mkEl('div','qr-row');
 
   var qm1 = mkEl('div','qr-mini qi');
@@ -837,7 +836,7 @@ function buildSummaryText(noIdea) {
   var emoji = EMOJI_RAW[firstGapChar] || '';
   var sep   = '\n' + '─'.repeat(44) + '\n';
   var lines = [];
-  lines.push('Choose Wisely Booth Activity – Your Summary');
+  lines.push('Choosing Wisely Booth Activity – Your Summary');
   lines.push(sep);
   lines.push('YOU ARE: ' + emoji + ' ' + c.name.toUpperCase());
   lines.push('\u201c' + c.tagline + '\u201d');
@@ -847,7 +846,7 @@ function buildSummaryText(noIdea) {
     lines.push('YOUR JOURNEY AHEAD');
     lines.push('');
     ['Validate the problem with data',
-     'Review the CW & QI method',
+     'Learn the Choosing Wisely &amp; QI method',
      'Build the right team',
      'Register your project'
     ].forEach(function(l){ lines.push('  \u25CB  ' + l); });
