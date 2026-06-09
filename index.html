@@ -4,16 +4,18 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Choosing Wisely · ACT Booth</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800;9..144,900&family=DM+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     min-height: 100vh;
     background: linear-gradient(135deg, #e8f4fd 0%, #f5e6ff 100%);
-    display: flex; align-items: center; justify-content: center;
-    padding: 24px 16px; font-family: 'DM Sans', sans-serif;
+    display: grid;
+    place-items: center;
+    padding: 40px 16px;
+    font-family: 'DM Sans', sans-serif;
   }
-  .wrapper { width: 100%; max-width: 740px; }
+  .wrapper { width: min(960px, 100%); }
   .header  { text-align: center; margin-bottom: 20px; }
   .badge {
     display: inline-flex; align-items: center; gap: 8px;
@@ -23,9 +25,9 @@
   }
   .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 1.5s infinite; flex-shrink: 0; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
-  h1 { font-family: 'Syne', sans-serif; font-size: clamp(22px,5vw,30px); font-weight: 900; color: #111; line-height: 1.1; }
+  h1 { font-family: 'Fraunces', serif; font-size: clamp(22px,5vw,30px); font-weight: 900; color: #111; line-height: 1.1; }
 
-  .card { background: #fff; border-radius: 24px; padding: 28px; box-shadow: 0 8px 40px rgba(0,0,0,.10); min-height: 360px; }
+  .card { background: #fff; border-radius: 24px; padding: 28px; box-shadow: 0 8px 40px rgba(0,0,0,.10); height: fit-content; }
   .card.animate { animation: fadeUp .25s ease forwards; }
   @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
@@ -50,7 +52,7 @@
   .progress-fill  { height: 100%; background: linear-gradient(90deg,#3a86ff,#8338ec); border-radius: 99px; transition: width .4s ease; }
 
   .step-label { font-size: 11px; font-family: 'DM Mono', monospace; color: #999; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
-  .question   { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; line-height: 1.3; color: #111; margin-bottom: 6px; }
+  .question   { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 800; line-height: 1.3; color: #111; margin-bottom: 6px; }
   .subtitle   { font-size: 13.5px; color: #666; line-height: 1.55; margin-bottom: 24px; }
 
   /* options */
@@ -73,7 +75,7 @@
     border-radius: 12px; padding: 10px 14px; margin-bottom: 16px;
   }
   .res-header span { font-size: 12px; font-family: 'DM Mono', monospace; color: #92400e; letter-spacing: .5px; font-weight: 600; }
-  .res-title { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 800; line-height: 1.3; color: #111; margin-bottom: 8px; }
+  .res-title { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 800; line-height: 1.3; color: #111; margin-bottom: 8px; }
   .res-body  { font-size: 13.5px; color: #444; line-height: 1.65; margin-bottom: 14px; }
   .tips { list-style: none; margin-bottom: 14px; }
   .tips li { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; font-size: 13.5px; color: #333; line-height: 1.5; }
@@ -167,7 +169,7 @@
   .char-card    { text-align: center; }
   .char-emoji   { font-size: 64px; line-height: 1; margin-bottom: 10px; }
   .char-youare  { font-size: 11px; font-family: 'DM Mono', monospace; color: #999; letter-spacing: 2px; margin-bottom: 6px; }
-  .char-name    { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 900; color: #111; margin-bottom: 6px; }
+  .char-name    { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 900; color: #111; margin-bottom: 6px; }
   .char-tagline { font-size: 14px; color: #555; font-style: italic; line-height: 1.5; margin-bottom: 20px; }
   .nudge-box    { border-radius: 16px; padding: 14px 18px; margin-bottom: 18px; text-align: left; }
   .nudge-label  { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 1px; margin-bottom: 5px; }
@@ -180,7 +182,7 @@
 
   .thankyou  { text-align:center; padding:20px 0; }
   .ty-emoji  { font-size:56px; margin-bottom:14px; }
-  .ty-title  { font-family:'Syne',sans-serif; font-size:25px; font-weight:900; color:#111; margin-bottom:10px; }
+  .ty-title  { font-family: 'Fraunces', serif; font-size:25px; font-weight:900; color:#111; margin-bottom:10px; }
   .ty-body   { font-size:14px; color:#555; line-height:1.65; margin-bottom:26px; }
 
   .footer { text-align:center; margin-top:14px; font-size:11px; color:#bbb; font-family:'DM Mono',monospace; }
@@ -196,12 +198,10 @@
   }
   .final-left {
     text-align: center;
-    position: sticky;
-    top: 0;
   }
   .final-emoji   { font-size: 52px; line-height: 1; margin-bottom: 6px; }
   .final-youare  { font-size: 10px; font-family: 'DM Mono', monospace; color: #999; letter-spacing: 2px; margin-bottom: 4px; }
-  .final-name    { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 900; color: #111; margin-bottom: 4px; line-height: 1.2; }
+  .final-name    { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 900; color: #111; margin-bottom: 4px; line-height: 1.2; }
   .final-tagline { font-size: 12px; color: #666; font-style: italic; line-height: 1.4; margin-bottom: 10px; }
   .final-nudge   { border-radius: 12px; padding: 10px 13px; text-align: left; }
   .final-nudge .fn-label { font-size: 10px; font-family: 'DM Mono', monospace; letter-spacing: 1px; margin-bottom: 4px; }
@@ -289,13 +289,36 @@
   }
   .email-copy-btn:hover { color:#555; }
 
+  /* ---- resource links ---- */
+  .links-row { display: flex; flex-direction: column; gap: 7px; }
+  .res-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; border-radius: 10px; border: 1.5px solid;
+    text-decoration: none; transition: all .18s; cursor: pointer;
+  }
+  .res-link:hover { transform: translateX(3px); }
+  .res-link.qi { border-color: #c4b5fd; background: #f5f3ff; }
+  .res-link.cw { border-color: #b8d0ff; background: #f0f5ff; }
+  .res-link.sh { border-color: #86efac; background: #f0fdf4; }
+  .rl-icon  { font-size: 18px; flex-shrink: 0; }
+  .rl-text  { flex: 1; }
+  .rl-title { font-weight: 700; font-size: 13px; }
+  .res-link.qi .rl-title { color: #4c1d95; }
+  .res-link.cw .rl-title { color: #1a56db; }
+  .res-link.sh .rl-title { color: #15803d; }
+  .rl-sub   { font-size: 11px; color: #888; margin-top: 1px; }
+  .rl-arrow { margin-left: auto; color: #bbb; font-size: 14px; font-weight: 700; }
+  .pb-link  { display:inline-block; margin-top:7px; font-size:12px; font-weight:700; text-decoration:none; }
+  .pb-box.cw .pb-link { color:#1a56db; }
+  .pb-box.qi .pb-link { color:#4c1d95; }
+
 </style>
 </head>
 <body>
 <div class="wrapper">
   <div class="header">
     <div class="badge"><span class="dot"></span> CHOOSING WISELY &middot; BOOTH ACTIVITY</div>
-    <h1>Where Are You<br>in Your Journey?</h1>
+    <h1>Where Are You in Your<br>Choosing Wisely Journey?</h1>
   </div>
   <div class="card" id="card"></div>
   <p class="footer">~5 min activity &middot; Links to resources</p>
@@ -311,7 +334,16 @@
 
    Setup instructions: see cw-gas-setup-instructions.txt
    ================================================================ */
-var GAS_URL = 'https://script.google.com/macros/s/AKfycby-I6K5jIHP6uqpkU5-jaPWWbE6iDWWhbNirRtaP8OaMuM72vpWs1sTjnlNJwnu_5aEnw/exec'
+var GAS_URL = 'https://script.google.com/macros/s/AKfycby-I6K5jIHP6uqpkU5-jaPWWbE6iDWWhbNirRtaP8OaMuM72vpWs1sTjnlNJwnu_5aEnw/exec';
+
+/* ================================================================
+   RESOURCE LINKS — paste your internal URLs here
+   ================================================================ */
+var LINKS = {
+  qi:     'https://healthsg.sharepoint.com/sites/Quality-Improvement',   // QI Playbook URL
+  cw:     'https://for.sg/knowmorecw',   // CW Infopedia URL
+  portal: 'https://singhealthapps.shs.com.sg/sites/sip/Pages/Home.aspx'    // SingHealth Improvement Portal URL
+};
 
 /* Plain-text emoji map (safe for email body) */
 var EMOJI_RAW = {
@@ -319,44 +351,6 @@ var EMOJI_RAW = {
   connector:'\uD83E\uDD1D', pioneer:'\uD83D\uDE80', champion:'\uD83C\uDFC6'
 };
 
-/* ---- QR SVG generator (simple placeholder pattern) ---- */
-function qrSVG(color) {
-  /* Renders a stylised QR-pattern placeholder in the given accent colour.
-     Replace the innerHTML of .qr-placeholder with a real QR image/canvas
-     once you have the actual URLs. */
-  var c = color || '#333';
-  var cells = [
-    [1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,1],
-    [1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1],
-    [1,0,1,1,1,0,1,0,0,1,1,0,1,1,1,0,1],
-    [1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1],
-    [1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,1],
-    [1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1],
-    [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
-    [1,0,1,1,0,1,1,1,1,0,1,0,1,1,0,1,1],
-    [0,1,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0],
-    [1,1,1,1,1,1,1,0,1,0,1,1,1,0,1,1,0],
-    [0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,1],
-    [1,1,1,1,1,1,1,0,0,0,1,0,1,0,1,0,1],
-    [1,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0],
-    [1,0,1,1,1,0,1,0,0,0,1,0,1,0,1,0,1],
-    [1,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0],
-    [1,1,1,1,1,1,1,0,0,0,1,0,1,0,1,1,1]
-  ];
-  var size = 72; var n = cells.length; var cell = size / n;
-  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">';
-  svg += '<rect width="' + size + '" height="' + size + '" fill="white" rx="6"/>';
-  for (var r = 0; r < n; r++) {
-    for (var cc = 0; cc < n; cc++) {
-      if (cells[r][cc]) {
-        svg += '<rect x="' + (cc * cell) + '" y="' + (r * cell) + '" width="' + cell + '" height="' + cell + '" fill="' + c + '"/>';
-      }
-    }
-  }
-  svg += '</svg>';
-  return svg;
-}
 
 /* ---- DATA ---- */
 var MILESTONES = [
@@ -369,7 +363,15 @@ var MILESTONES = [
     resource: {
       title: 'Validate Your Problem First',
       body: 'A strong CW project starts with solid evidence. Without data it\'s hard to know if the problem is real or how big it is.',
-      box: { title: '&#x1F4CA; Data &amp; How to Get It', desc: 'Learn how to gather the right data to confirm your problem and build your case.' }
+      box: {
+        title: '&#x1F4CA; Data &amp; How to Get It',
+        intro: 'Ways to gather the right data to confirm your problem and build your case:',
+        tips: [
+          '<strong>Find existing data</strong> — use department‑tracked reports and dashboards',
+          '<strong>Ask for support</strong> — submit a data request for additional insights',
+          '<strong>Collect data manually</strong> — fill gaps where data isn’t readily available'
+        ]
+      }
     },
     character: 'explorer',
     summaryOk:  'Problem validated with data',
@@ -616,7 +618,16 @@ function renderResource() {
   if (r.box) {
     var box = mkEl('div','res-box');
     box.appendChild(mkEl('div','rb-title', r.box.title));
-    box.appendChild(mkEl('div','rb-desc',  r.box.desc));
+    if (r.box.intro) {
+      var intro = mkEl('p','rb-desc', r.box.intro); intro.style.marginBottom='8px';
+      box.appendChild(intro);
+    }
+    if (r.box.desc) box.appendChild(mkEl('div','rb-desc', r.box.desc));
+    if (r.box.tips) {
+      var btul = mkEl('ul','tips'); btul.style.marginBottom='0';
+      r.box.tips.forEach(function(t){ btul.appendChild(mkEl('li',null,t)); });
+      box.appendChild(btul);
+    }
     card.appendChild(box);
   }
 
@@ -714,21 +725,26 @@ function renderSummary(noIdea) {
   }
   right.appendChild(rows);
 
-  /* QR codes */
+  /* Resource links */
   right.appendChild(mkEl('div','step-label','LINKS TO RESOURCES'));
-  var qrRow = mkEl('div','qr-row');
+  var linksRow = mkEl('div','links-row');
 
-  var qm1 = mkEl('div','qr-mini qi');
-  var qs1 = document.createElement('div'); qs1.style.cssText='width:44px;height:44px;flex-shrink:0'; qs1.innerHTML=qrSVG('#4c1d95').replace('width="72" height="72"','width="44" height="44"').replace('viewBox="0 0 72 72"','viewBox="0 0 72 72"');
-  var qt1 = mkEl('div','qr-mini-text'); qt1.appendChild(mkEl('div','qmt-title','QI Playbook')); qt1.appendChild(mkEl('div','qmt-sub','Methodology guide'));
-  qm1.appendChild(qs1); qm1.appendChild(qt1); qrRow.appendChild(qm1);
+  function makeResLink(cls, icon, title, sub, url) {
+    var a = mkEl('a','res-link '+cls); a.href=url||'#'; a.target='_blank'; a.rel='noopener';
+    var ic=mkEl('span','rl-icon'); ic.innerHTML=icon; a.appendChild(ic);
+    var txt=mkEl('div','rl-text');
+    txt.appendChild(mkEl('div','rl-title',title));
+    if(sub) txt.appendChild(mkEl('div','rl-sub',sub));
+    a.appendChild(txt);
+    a.appendChild(mkEl('span','rl-arrow','&#x2192;'));
+    return a;
+  }
 
-  var qm2 = mkEl('div','qr-mini cw');
-  var qs2 = document.createElement('div'); qs2.style.cssText='width:44px;height:44px;flex-shrink:0'; qs2.innerHTML=qrSVG('#1a56db').replace('width="72" height="72"','width="44" height="44"').replace('viewBox="0 0 72 72"','viewBox="0 0 72 72"');
-  var qt2 = mkEl('div','qr-mini-text'); qt2.appendChild(mkEl('div','qmt-title','CW Resources')); qt2.appendChild(mkEl('div','qmt-sub','Tools &amp; templates'));
-  qm2.appendChild(qs2); qm2.appendChild(qt2); qrRow.appendChild(qm2);
+  linksRow.appendChild(makeResLink('qi','&#x1F4D8;','QI Playbook','Step-by-step QI methodology guide', LINKS.qi));
+  linksRow.appendChild(makeResLink('cw','&#x1F4D7;','CW Infopedia','Choosing Wisely resources &amp; tools', LINKS.cw));
+  linksRow.appendChild(makeResLink('sh','&#x1F4CB;','SingHealth Improvement Portal','Register your QI project', LINKS.portal));
 
-  right.appendChild(qrRow);
+  right.appendChild(linksRow);
 
   /* idea board */
   var board = mkEl('div','idea-mini');
@@ -909,30 +925,28 @@ function sendSummaryEmail(email, noIdea, sendBtn) {
   sendBtn.disabled = true;
   sendBtn.textContent = 'Sending…';
 
-  /* GAS redirects POST requests — mode:'no-cors' bypasses the CORS block.
-     The response is opaque so we can't read it back, but the email
-     sends server-side regardless. */
-  fetch(GAS_URL, {
-    method:  'POST',
-    mode:    'no-cors',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body:    JSON.stringify({
-      to_email:       email,
-      character_name: c.name,
-      message:        buildSummaryText(noIdea)
-    })
-  })
-  .then(function() {
-    sendBtn.disabled = false;
-    sendBtn.innerHTML = 'Send &#x2709;';
-    showEmailStatus('\u2705 Sent! Check your inbox.', 'ok');
-    document.getElementById('summary-email-input').value = '';
-  })
-  .catch(function() {
-    sendBtn.disabled = false;
-    sendBtn.innerHTML = 'Send &#x2709;';
-    showEmailStatus('Network error — use Copy instead', 'err');
+  /* Hidden iframe form submit — bypasses CORS entirely.
+     GAS redirects cross-origin, blocking fetch() even with no-cors.
+     Form submissions to iframes have no such restriction. */
+  var uid = 'f'+Date.now();
+  var iframe = document.createElement('iframe');
+  iframe.name=uid; iframe.style.cssText='display:none;position:fixed;width:0;height:0;border:0;';
+  document.body.appendChild(iframe);
+  var form = document.createElement('form');
+  form.method='POST'; form.action=GAS_URL; form.target=uid; form.style.display='none';
+  [['to_email',email],['character_name',c.name],['message',buildSummaryText(noIdea)]]
+  .forEach(function(p){
+    var inp=document.createElement('input'); inp.type='hidden'; inp.name=p[0]; inp.value=p[1];
+    form.appendChild(inp);
   });
+  document.body.appendChild(form);
+  form.submit();
+  setTimeout(function(){
+    try{document.body.removeChild(form);document.body.removeChild(iframe);}catch(e){}
+    sendBtn.disabled=false; sendBtn.innerHTML='Send &#x2709;';
+    showEmailStatus('\u2705 Sent! Check your inbox.','ok');
+    document.getElementById('summary-email-input').value='';
+  }, 2500);
 }
 
 /* ---- MAIN RENDER ---- */
