@@ -362,7 +362,7 @@ var MILESTONES = [
     no:  { label: 'I\'m not sure yet',              icon: '&#x1F50D;' },
     resource: {
       title: 'Validate Your Problem First',
-      body: 'A strong CW project starts with solid evidence. Without data it\'s hard to know if the problem is real or how big it is.',
+      body: 'A strong Choosing Wisely QI project starts with solid evidence. Without data it\'s hard to know if the problem is significant or how big it is.',
       box: {
         title: '&#x1F4CA; Data &amp; How to Get It',
         intro: 'Ways to gather the right data to confirm your problem and build your case:',
@@ -515,7 +515,6 @@ function renderStart() {
   card.innerHTML = ''; animate();
   card.appendChild(mkEl('div','step-label','Choose your path'));
   card.appendChild(mkEl('div','question','Do you have a Choosing Wisely project idea?'));
-  card.appendChild(mkEl('p','subtitle','Something in your workplace you\'d love to improve or fix'));
   var opts = mkEl('div','options');
 
   function makeOpt(iconHtml, label, onClick) {
