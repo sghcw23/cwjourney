@@ -318,7 +318,7 @@
 <div class="wrapper">
   <div class="header">
     <div class="badge"><span class="dot"></span> CHOOSING WISELY &middot; BOOTH ACTIVITY</div>
-    <h1>Where Are You<br>in Your Journey?</h1>
+    <h1>Where Are You<br>in Your Choosing Wisely Journey?</h1>
   </div>
   <div class="card" id="card"></div>
   <p class="footer">~5 min activity &middot; Links to resources</p>
@@ -337,7 +337,7 @@
 var GAS_URL = 'https://script.google.com/macros/s/AKfycby-I6K5jIHP6uqpkU5-jaPWWbE6iDWWhbNirRtaP8OaMuM72vpWs1sTjnlNJwnu_5aEnw/exec';
 
 var LINKS = {
-  qi:     'https://healthsg.sharepoint.com/sites/Quality-Improvement',
+  qi:     'https://healthsg.sharepoint.com/sites/Quality-Improvement/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FQuality%2DImprovement%2FShared%20Documents%2FPage%20%2D%20Quality%20Improvement%20Projects%2FThe%20Art%20of%20Kaizen%20%2D%20Brief%20Guide%2Epdf&parent=%2Fsites%2FQuality%2DImprovement%2FShared%20Documents%2FPage%20%2D%20Quality%20Improvement%20Projects',
   cw:     'https://for.sg/knowmorecw',
   portal: 'https://singhealthapps.shs.com.sg/sites/sip/Pages/Home.aspx'
 };
@@ -395,10 +395,10 @@ var MILESTONES = [
       title: 'Build Your Change Team',
       body: 'The right team makes the difference. Think beyond your immediate circle \u2014 you need clinical leads, data support, and frontline voices.',
       tips: [
-        'Clinical lead or champion in the relevant specialty',
-        'Someone with data / audit access',
-        'A frontline clinician who feels the problem daily',
-        'A manager who can unblock barriers'
+        'A clinical champion who leads the project and chairs the review meetings',
+        'A frontline clinician who provides feedback on the problem experienced first-hand',
+        'A colleague who has access to system data and audit findings',
+        'A project sponsor who supports the team with resources and decision-making'
       ]
     },
     character: 'connector',
@@ -502,9 +502,9 @@ function playbookPair() {
   pair.appendChild(cw);
   var qi = mkEl('div','pb-box qi');
   qi.appendChild(mkEl('div','pb-label','QI RESOURCE'));
-  qi.appendChild(mkEl('div','pb-title','&#x1F4D8; QI Playbook'));
+  qi.appendChild(mkEl('div','pb-title','&#x1F4D8; The Art of Kaizen'));
   qi.appendChild(mkEl('div','pb-desc','Step-by-step Quality Improvement guidance \u2014 scoping, PDSA cycles, measurement, and sustaining change.'));
-  var qiA=mkEl('a','pb-link','Open QI Playbook &#x2192;'); qiA.href=LINKS.qi; qiA.target='_blank'; qiA.rel='noopener'; qi.appendChild(qiA);
+  var qiA=mkEl('a','pb-link','Open The Art of Kaizen &#x2192;'); qiA.href=LINKS.qi; qiA.target='_blank'; qiA.rel='noopener'; qi.appendChild(qiA);
   pair.appendChild(qi);
   return pair;
 }
@@ -728,7 +728,7 @@ function renderSummary(noIdea) {
     if(sub) txt.appendChild(mkEl('div','rl-sub',sub));
     a.appendChild(txt); a.appendChild(mkEl('span','rl-arrow','&#x2192;')); return a;
   }
-  linksRow.appendChild(makeResLink('qi','&#x1F4D8;','QI Playbook','Step-by-step QI methodology guide',LINKS.qi));
+  linksRow.appendChild(makeResLink('qi','&#x1F4D8;','The Art of Kaizen','Step-by-step QI methodology guide',LINKS.qi));
   linksRow.appendChild(makeResLink('cw','&#x1F4D7;','CW Infopedia','Choosing Wisely resources &amp; tools',LINKS.cw));
   linksRow.appendChild(makeResLink('sh','&#x1F4CB;','SingHealth Improvement Portal','Register your QI project',LINKS.portal));
   right.appendChild(linksRow);
@@ -865,7 +865,7 @@ function buildSummaryText(noIdea) {
   lines.push('RESOURCES');
   lines.push('');
   lines.push('\uD83D\uDCD7  CW Infopedia:      ' + LINKS.cw);
-  lines.push('\uD83D\uDCD8  QI Playbook:       ' + LINKS.qi);
+  lines.push('\uD83D\uDCD8  The Art of Kaizen:       ' + LINKS.qi);
   lines.push('\uD83D\uDCCA  SingHealth Improvement Portal: ' + LINKS.portal);
   lines.push(sep);
   lines.push('Keep choosing wisely! \u2728');
