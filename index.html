@@ -339,7 +339,7 @@ var GAS_URL = 'https://script.google.com/macros/s/AKfycby-I6K5jIHP6uqpkU5-jaPWWb
 var LINKS = {
   qi:     'https://healthsg.sharepoint.com/sites/Quality-Improvement/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FQuality%2DImprovement%2FShared%20Documents%2FPage%20%2D%20Quality%20Improvement%20Projects%2FThe%20Art%20of%20Kaizen%20%2D%20Brief%20Guide%2Epdf&parent=%2Fsites%2FQuality%2DImprovement%2FShared%20Documents%2FPage%20%2D%20Quality%20Improvement%20Projects',
   cw:     'https://for.sg/knowmorecw',
-  portal: 'https://singhealthapps.shs.com.sg/sites/sip/Pages/Home.aspx'
+  portal: 'https://singhealthapps.shs.com.sg/sites/sip/project/Pages/NewProject.aspx'
 };
 
 /* Plain-text emoji map (safe for email body) */
@@ -505,12 +505,12 @@ function playbookPair() {
   cw.appendChild(mkEl('div','pb-label','CW RESOURCE'));
   cw.appendChild(mkEl('div','pb-title','&#x1F4D7; Choosing Wisely Sharepoint'));
   cw.appendChild(mkEl('div','pb-desc','Your guide to choosing wisely \u2014 playbooks, tools and more information.'));
-  var cwA=mkEl('a','pb-link','Visit CW Infopedia &#x2192;'); cwA.href=LINKS.cw; cwA.target='_blank'; cwA.rel='noopener'; cw.appendChild(cwA);
+  var cwA=mkEl('a','pb-link','Visit CW Sharepoint &#x2192;'); cwA.href=LINKS.cw; cwA.target='_blank'; cwA.rel='noopener'; cw.appendChild(cwA);
   pair.appendChild(cw);
   var qi = mkEl('div','pb-box qi');
   qi.appendChild(mkEl('div','pb-label','QI RESOURCE'));
   qi.appendChild(mkEl('div','pb-title','&#x1F4D8; The Art of Kaizen'));
-  qi.appendChild(mkEl('div','pb-desc','Step-by-step Quality Improvement guidance \u2014 scoping, PDSA cycles, measurement, and sustaining change.'));
+  qi.appendChild(mkEl('div','pb-desc','A step-by-step guide to doing Improvement Projects'));
   var qiA=mkEl('a','pb-link','Open The Art of Kaizen &#x2192;'); qiA.href=LINKS.qi; qiA.target='_blank'; qiA.rel='noopener'; qi.appendChild(qiA);
   pair.appendChild(qi);
   return pair;
@@ -521,7 +521,6 @@ function renderStart() {
   card.innerHTML = ''; animate();
   card.appendChild(mkEl('div','step-label','Choose your path'));
   card.appendChild(mkEl('div','question','Do you have a Choosing Wisely project idea?'));
-  card.appendChild(mkEl('p','subtitle','Something in your workplace you\'d love to improve or fix'));
   var opts = mkEl('div','options');
 
   function makeOpt(iconHtml, label, onClick) {
@@ -736,7 +735,7 @@ function renderSummary(noIdea) {
     a.appendChild(txt); a.appendChild(mkEl('span','rl-arrow','&#x2192;')); return a;
   }
   linksRow.appendChild(makeResLink('qi','&#x1F4D8;','The Art of Kaizen','Step-by-step QI methodology guide',LINKS.qi));
-  linksRow.appendChild(makeResLink('cw','&#x1F4D7;','CW Infopedia','Choosing Wisely resources &amp; tools',LINKS.cw));
+  linksRow.appendChild(makeResLink('cw','&#x1F4D7;','CW Sharepoint','Choosing Wisely resources &amp; tools',LINKS.cw));
   linksRow.appendChild(makeResLink('sh','&#x1F4CB;','SingHealth Improvement Portal','Register your QI project',LINKS.portal));
   right.appendChild(linksRow);
 
@@ -883,7 +882,7 @@ function buildSummaryText(noIdea) {
   lines.push(sep);
   lines.push('RESOURCES');
   lines.push('');
-  lines.push('\uD83D\uDCD7  CW Infopedia:      ' + LINKS.cw);
+  lines.push('\uD83D\uDCD7  CW Sharepoint:      ' + LINKS.cw);
   lines.push('\uD83D\uDCD8  The Art of Kaizen:       ' + LINKS.qi);
   lines.push('\uD83D\uDCCA  SingHealth Improvement Portal: ' + LINKS.portal);
   lines.push(sep);
