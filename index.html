@@ -743,10 +743,10 @@ function renderSummary(noIdea) {
   var board = mkEl('div','idea-mini');
   if (noIdea) {
     board.appendChild(mkEl('div','im-title','&#x1F4DD; Write your reflection'));
-    board.appendChild(mkEl('div','im-body','Jot down one thing you’ve noticed in your work on a sticky note. Place it on the <strong>Seedling board</strong>.'));
+    board.appendChild(mkEl('div','im-body','Scan the QR for padlet & jot down one thing you'll take away today under <strong> reflections</strong>.'));
   } else {
-    board.appendChild(mkEl('div','im-title','&#x1F4CB; Pin your idea to the board'));
-    board.appendChild(mkEl('div','im-body','Write your project idea and place it under its domain:'));
+    board.appendChild(mkEl('div','im-title','&#x1F4CB; Put up your idea in Padlet'));
+    board.appendChild(mkEl('div','im-body','Scan the QR for padle, jot down your project idea and place it under its domain:'));
     var tags = mkEl('div','domain-tags-mini');
     DOMAINS.forEach(function(d){ tags.appendChild(mkEl('span','domain-tag-mini '+d.cls, d.label)); });
     board.appendChild(tags);
