@@ -312,6 +312,9 @@
   .pb-box.cw .pb-link { color:#1a56db; }
   .pb-box.qi .pb-link { color:#4c1d95; }
 
+  /* locked-done hint */
+  .done-hint { font-size:11px; color:#b45309; text-align:center; font-family:'DM Mono',monospace; letter-spacing:.3px; }
+
 </style>
 </head>
 <body>
@@ -326,14 +329,6 @@
 
 <script>
 
-/* ================================================================
-   EMAIL SETUP  (optional — Copy summary works without this)
-
-   Paste your Google Apps Script web app URL below.
-   Leave as '' to disable sending (Copy summary still works).
-
-   Setup instructions: see cw-gas-setup-instructions.txt
-   ================================================================ */
 var GAS_URL = 'https://script.google.com/macros/s/AKfycby-I6K5jIHP6uqpkU5-jaPWWbE6iDWWhbNirRtaP8OaMuM72vpWs1sTjnlNJwnu_5aEnw/exec';
 
 var LINKS = {
@@ -342,14 +337,11 @@ var LINKS = {
   portal: 'https://singhealthapps.shs.com.sg/sites/sip/project/Pages/NewProject.aspx'
 };
 
-/* Plain-text emoji map (safe for email body) */
 var EMOJI_RAW = {
   seed:'\uD83C\uDF31', explorer:'\uD83D\uDD2D', strategist:'\uD83D\uDDFA\uFE0F',
   connector:'\uD83E\uDD1D', pioneer:'\uD83D\uDE80', champion:'\uD83C\uDFC6'
 };
 
-
-/* ---- DATA ---- */
 var MILESTONES = [
   {
     id: 'validate_problem', stepNum: 1, label: 'Milestone 1 of 4',
@@ -364,9 +356,9 @@ var MILESTONES = [
         title: '&#x1F4CA; Data &amp; How to Get It',
         intro: 'Ways to gather the right data to confirm your problem and build your case:',
         tips: [
-          '<strong>Find existing data</strong> — use department‑tracked reports and dashboards',
-          '<strong>Ask for support</strong> — submit a data request for additional insights',
-          '<strong>Collect data manually</strong> — fill gaps where data isn’t readily available'
+          '<strong>Find existing data</strong> \u2014 use department\u2011tracked reports and dashboards',
+          '<strong>Ask for support</strong> \u2014 submit a data request for additional insights',
+          '<strong>Collect data manually</strong> \u2014 fill gaps where data isn\u2019t readily available'
         ]
       }
     },
@@ -377,10 +369,10 @@ var MILESTONES = [
   {
     id: 'know_qi', stepNum: 2, label: 'Milestone 2 of 4',
     question: 'Are you familiar with Choosing Wisely & QI methodology?',
-    subtitle: 'Practical tools to help you along your project journey — this resource is for everyone.',
+    subtitle: 'Practical tools to help you along your project journey \u2014 this resource is for everyone.',
     yes: { label: 'Yes, I know it well',  icon: '&#x2705;' },
     no:  { label: 'Not fully yet',        icon: '&#x1F4D6;' },
-    resource: null, /* handled specially — always shown */
+    resource: null,
     character: 'strategist',
     summaryOk:  'Familiar with CW QI method',
     summaryGap: 'Learn the Choosing Wisely &amp; QI method'
@@ -417,8 +409,8 @@ var MILESTONES = [
         title: '&#x1F4CB; Register Your CW Project',
         intro: 'Registering your QI project connects you with dedicated support to help you succeed. Here\'s how:',
         tips: [
-          '<strong>Obtain Approval</strong> — State your interest to start a project to relevant leaders and get their approval',
-          '<strong>Register your Project</strong> — Access the SingHealth Improvement Portal (SIP) to fill up the Project Registration Form online'
+          '<strong>Obtain Approval</strong> \u2014 State your interest to start a project to relevant leaders and get their approval',
+          '<strong>Register your Project</strong> \u2014 Access the SingHealth Improvement Portal (SIP) to fill up the Project Registration Form online'
         ]
       }
     },
@@ -430,10 +422,10 @@ var MILESTONES = [
 
 var DOMAINS = [
   { label: 'Using Labs Wisely',       cls: 'd1' },
-  { label: 'Using Medicines Wisely',          cls: 'd2' },
-  { label: 'Using Scans Wisely',        cls: 'd3' },
-  { label: 'Using Referrals Wisely',         cls: 'd4' },
-  { label: 'Others',    cls: 'd5' }
+  { label: 'Using Medicines Wisely',  cls: 'd2' },
+  { label: 'Using Scans Wisely',      cls: 'd3' },
+  { label: 'Using Referrals Wisely',  cls: 'd4' },
+  { label: 'Others',                  cls: 'd5' }
 ];
 
 var CHARS = {
@@ -448,17 +440,17 @@ var CHARS = {
 /* ---- STATE ---- */
 var phase        = 'start';
 var milestoneIdx = 0;
-var answers      = [];        // true/false per milestone
+var answers      = [];
 var firstGapChar = null;
-var showRes      = false;     // showing resource mid-flow?
-var isQIStep     = false;     // special QI always-show step
+var showRes      = false;
+var isQIStep     = false;
 
 var card = document.getElementById('card');
 
 /* ---- HELPERS ---- */
 function mkEl(tag, cls, html) {
   var n = document.createElement(tag);
-  if (cls)             n.className = cls;
+  if (cls)  n.className = cls;
   if (html !== undefined) n.innerHTML = html;
   return n;
 }
@@ -522,7 +514,6 @@ function renderStart() {
   card.appendChild(mkEl('div','step-label','Choose your path'));
   card.appendChild(mkEl('div','question','Do you have a Choosing Wisely project idea?'));
   var opts = mkEl('div','options');
-
   function makeOpt(iconHtml, label, onClick) {
     var btn = mkEl('button','option-btn');
     var ic = mkEl('span','opt-icon'); ic.innerHTML = iconHtml;
@@ -551,11 +542,9 @@ function renderNoIdea() {
    'Learn from others and share what works'].forEach(function(t){ul.appendChild(mkEl('li',null,t));});
   card.appendChild(ul);
 
-  /* Both playbooks shown here */
   card.appendChild(mkEl('div','step-label','RESOURCES FOR YOU'));
   card.appendChild(playbookPair());
 
-  /* Journey preview */
   card.appendChild(mkEl('div','divider'));
   card.appendChild(mkEl('div','step-label','THE FULL JOURNEY AHEAD'));
   var preview = mkEl('div','summary-items');
@@ -614,7 +603,7 @@ function renderResource() {
   card.appendChild(rh);
 
   card.appendChild(mkEl('div','res-title', r.title));
-  card.appendChild(mkEl('p','res-body', r.body));
+  if (r.body) card.appendChild(mkEl('p','res-body', r.body));
   if (r.tips) {
     var ul = mkEl('ul','tips');
     r.tips.forEach(function(t){ul.appendChild(mkEl('li',null,t));});
@@ -642,7 +631,7 @@ function renderResource() {
   card.appendChild(cta);
 }
 
-/* ---- RENDER: QI RESOURCE (always shown regardless of answer) ---- */
+/* ---- RENDER: QI RESOURCE ---- */
 function renderQIResource() {
   showRes = true;
   card.innerHTML = ''; animate();
@@ -655,7 +644,6 @@ function renderQIResource() {
 
   card.appendChild(mkEl('div','res-title','Your CW &amp; QI Toolkit'));
   card.appendChild(mkEl('p','res-body','Whether you are a Choosing Wisely or QI guru or are just getting started, these two resources cover every stage of your project.'));
-
   card.appendChild(playbookPair());
 
   var isLast = (milestoneIdx === MILESTONES.length - 1);
@@ -671,16 +659,15 @@ function renderQIResource() {
   card.appendChild(cta);
 }
 
-/* ---- RENDER: SUMMARY (with idea and then also QR codes) ---- */
+/* ---- RENDER: SUMMARY ---- */
 function renderSummary(noIdea) {
   var c = CHARS[firstGapChar];
   card.innerHTML = ''; animate();
 
   var allYes = !noIdea && answers.every(function(a){return a;});
-
   var grid = mkEl('div','final-grid');
 
-  /* ---- LEFT: character ---- */
+  /* LEFT: character */
   var left = mkEl('div','final-left');
   var emo = mkEl('div','final-emoji'); emo.innerHTML = c.emoji; left.appendChild(emo);
   left.appendChild(mkEl('div','final-youare','YOU ARE'));
@@ -693,13 +680,11 @@ function renderSummary(noIdea) {
   nudge.appendChild(nl); nudge.appendChild(nt); left.appendChild(nudge);
   grid.appendChild(left);
 
-  /* ---- RIGHT ---- */
+  /* RIGHT */
   var right = mkEl('div','final-right');
 
-  /* section label */
   right.appendChild(mkEl('div','step-label', noIdea ? 'YOUR JOURNEY AHEAD' : (allYes ? 'YOUR ROADMAP' : 'HERE\u2019S WHERE YOU\u2019RE AT')));
 
-  /* milestone rows */
   var rows = mkEl('div','sum-rows');
   if (noIdea) {
     ['Validate the problem with data',
@@ -739,24 +724,24 @@ function renderSummary(noIdea) {
   linksRow.appendChild(makeResLink('sh','&#x1F4CB;','SingHealth Improvement Portal','Register your QI project',LINKS.portal));
   right.appendChild(linksRow);
 
-  /* idea board */
+  /* Idea board */
   var board = mkEl('div','idea-mini');
   if (noIdea) {
     board.appendChild(mkEl('div','im-title','&#x1F4DD; Write your reflection'));
-    board.appendChild(mkEl('div','im-body','Scan the QR for padlet & jot down one thing you'll take away today under <strong> reflections</strong>.'));
+    board.appendChild(mkEl('div','im-body','Scan the QR for padlet &amp; jot down one thing you\u2019ll take away today under <strong>reflections</strong>.'));
   } else {
     board.appendChild(mkEl('div','im-title','&#x1F4CB; Put up your idea in Padlet'));
-    board.appendChild(mkEl('div','im-body','Scan the QR for padle, jot down your project idea and place it under its domain:'));
+    board.appendChild(mkEl('div','im-body','Scan the QR for padlet, jot down your project idea and place it under its domain:'));
     var tags = mkEl('div','domain-tags-mini');
     DOMAINS.forEach(function(d){ tags.appendChild(mkEl('span','domain-tag-mini '+d.cls, d.label)); });
     board.appendChild(tags);
   }
   right.appendChild(board);
 
-  /* email capture — required before Done unlocks */
+  /* ---- Email capture — REQUIRED to unlock Done ---- */
   var esec = mkEl('div','email-section');
-  var elabel = mkEl('div','step-label','SEND YOUR SUMMARY TO CONTINUE');
-  elabel.style.cssText = 'color:#b45309; font-weight:700;';
+  var elabel = mkEl('div','step-label','&#x2709; SEND YOUR SUMMARY TO CONTINUE');
+  elabel.style.cssText = 'color:#b45309; font-weight:700; margin-bottom:4px;';
   esec.appendChild(elabel);
   var erow = mkEl('div','email-row');
   var einput = mkEl('input','email-input');
@@ -770,7 +755,7 @@ function renderSummary(noIdea) {
   esec.appendChild(erow); esec.appendChild(emeta);
   right.appendChild(esec);
 
-  /* buttons — Done is locked until email is sent */
+  /* Buttons — Done locked until email sent */
   var btns = mkEl('div','final-btns');
   var back = mkEl('button','btn-ghost','&#x21A9; Start over');
   var done = mkEl('button','btn-primary','Done! &#x1F389;');
@@ -781,11 +766,14 @@ function renderSummary(noIdea) {
   done.addEventListener('click', function(){ if (!done.disabled) { phase='done'; render(); } });
   btns.appendChild(back); btns.appendChild(done);
   right.appendChild(btns);
+  right.appendChild(mkEl('div','done-hint','Send your summary above to unlock Done'));
 
   function unlockDone() {
     done.disabled = false;
     done.style.opacity = '';
     done.style.cursor = '';
+    var hint = right.querySelector('.done-hint');
+    if (hint) hint.style.display = 'none';
   }
 
   esend.addEventListener('click', function(){
@@ -803,7 +791,7 @@ function renderSummary(noIdea) {
   card.appendChild(grid);
 }
 
-/* renderCharCard now just calls renderSummary — kept for safety */
+/* renderCharCard now just calls renderSummary */
 function renderCharCard() { renderSummary(false); }
 
 /* ---- RENDER: DONE ---- */
@@ -826,7 +814,6 @@ function answer(isYes) {
 
   var m = MILESTONES[milestoneIdx];
 
-  // QI milestone: ALWAYS show playbook resource regardless of answer
   if (m.id === 'know_qi') {
     phase = 'qi_resource';
     render(); return;
@@ -850,14 +837,13 @@ function doRestart() {
   phase='start'; milestoneIdx=0; answers=[]; firstGapChar=null; showRes=false; isQIStep=false; render();
 }
 
-
 /* ---- EMAIL HELPERS ---- */
 function buildSummaryText(noIdea) {
   var c     = CHARS[firstGapChar];
   var emoji = EMOJI_RAW[firstGapChar] || '';
-  var sep   = '\n' + '─'.repeat(44) + '\n';
+  var sep   = '\n' + '\u2500'.repeat(44) + '\n';
   var lines = [];
-  lines.push('Choosing Wisely Booth Activity – Your Summary');
+  lines.push('Choosing Wisely Booth Activity \u2013 Your Summary');
   lines.push(sep);
   lines.push('YOU ARE: ' + emoji + ' ' + c.name.toUpperCase());
   lines.push('\u201c' + c.tagline + '\u201d');
@@ -867,7 +853,7 @@ function buildSummaryText(noIdea) {
     lines.push('YOUR JOURNEY AHEAD');
     lines.push('');
     ['Validate the problem with data',
-     'Learn the Choosing Wisely &amp; QI method',
+     'Learn the Choosing Wisely & QI method',
      'Build the right team',
      'Register your project'
     ].forEach(function(l){ lines.push('  \u25CB  ' + l); });
@@ -882,8 +868,8 @@ function buildSummaryText(noIdea) {
   lines.push(sep);
   lines.push('RESOURCES');
   lines.push('');
-  lines.push('\uD83D\uDCD7  CW Sharepoint:      ' + LINKS.cw);
-  lines.push('\uD83D\uDCD8  The Art of Kaizen:       ' + LINKS.qi);
+  lines.push('\uD83D\uDCD7  CW Sharepoint:                 ' + LINKS.cw);
+  lines.push('\uD83D\uDCD8  The Art of Kaizen:             ' + LINKS.qi);
   lines.push('\uD83D\uDCCA  SingHealth Improvement Portal: ' + LINKS.portal);
   lines.push(sep);
   lines.push('Keep choosing wisely! \u2728');
@@ -893,7 +879,6 @@ function buildSummaryText(noIdea) {
 
 function copySummary(noIdea, btn) {
   var text = buildSummaryText(noIdea);
-  var status = document.getElementById('email-status');
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function(){
@@ -910,7 +895,7 @@ function copySummary(noIdea, btn) {
       showEmailStatus('Summary copied to clipboard', 'ok');
       setTimeout(function(){ if (btn) btn.textContent = 'Copy summary'; }, 2500);
     }
-  } catch(e) { showEmailStatus('Could not copy — try again', 'err'); }
+  } catch(e) { showEmailStatus('Could not copy \u2014 try again', 'err'); }
 }
 
 function showEmailStatus(msg, cls) {
@@ -923,12 +908,12 @@ function showEmailStatus(msg, cls) {
 
 function sendSummaryEmail(email, noIdea, sendBtn) {
   if (!GAS_URL) {
-    showEmailStatus('Email not configured — use Copy instead', 'err');
+    showEmailStatus('Email not configured \u2014 use Copy instead', 'err');
     return;
   }
   var c = CHARS[firstGapChar];
   sendBtn.disabled = true;
-  sendBtn.textContent = 'Sending…';
+  sendBtn.textContent = 'Sending\u2026';
 
   var uid='f'+Date.now();
   var iframe=document.createElement('iframe');
