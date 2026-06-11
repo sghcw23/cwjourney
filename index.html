@@ -413,7 +413,14 @@ var MILESTONES = [
     no:  { label: 'Not yet \u2014 how do I?', icon: '&#x1F4CB;' },
     resource: {
       title: 'Register Your Project',
-      box: { title: '&#x1F4CB; Register Your CW Project', desc: 'Register your Choosing Wisely QI project in the SingHealth Improvement Portal. Registering your QI project connects you with dedicated support to help you succeed.' }
+      box: {
+        title: '&#x1F4CB; Register Your CW Project',
+        intro: 'Registering your QI project connects you with dedicated support to help you succeed. Here\'s how:',
+        tips: [
+          '<strong>Obtain Approval</strong> — State your interest to start a project to relevant leaders and get their approval',
+          '<strong>Register your Project</strong> — Access the SingHealth Improvement Portal (SIP) to fill up the Project Registration Form online'
+        ]
+      }
     },
     character: 'pioneer',
     summaryOk:  'Project registered',
@@ -424,7 +431,7 @@ var MILESTONES = [
 var DOMAINS = [
   { label: 'Using Labs Wisely',       cls: 'd1' },
   { label: 'Using Medicines Wisely',          cls: 'd2' },
-  { label: 'Using Imaging Wisely',        cls: 'd3' },
+  { label: 'Using Scans Wisely',        cls: 'd3' },
   { label: 'Using Referrals Wisely',         cls: 'd4' },
   { label: 'Others',    cls: 'd5' }
 ];
@@ -747,9 +754,11 @@ function renderSummary(noIdea) {
   }
   right.appendChild(board);
 
-  /* email capture */
+  /* email capture — required before Done unlocks */
   var esec = mkEl('div','email-section');
-  esec.appendChild(mkEl('div','step-label','GET YOUR SUMMARY BY EMAIL'));
+  var elabel = mkEl('div','step-label','SEND YOUR SUMMARY TO CONTINUE');
+  elabel.style.cssText = 'color:#b45309; font-weight:700;';
+  esec.appendChild(elabel);
   var erow = mkEl('div','email-row');
   var einput = mkEl('input','email-input');
   einput.type='email'; einput.placeholder='your@email.com'; einput.id='summary-email-input';
@@ -762,24 +771,34 @@ function renderSummary(noIdea) {
   esec.appendChild(erow); esec.appendChild(emeta);
   right.appendChild(esec);
 
+  /* buttons — Done is locked until email is sent */
+  var btns = mkEl('div','final-btns');
+  var back = mkEl('button','btn-ghost','&#x21A9; Start over');
+  var done = mkEl('button','btn-primary','Done! &#x1F389;');
+  done.disabled = true;
+  done.style.opacity = '0.4';
+  done.style.cursor = 'not-allowed';
+  back.addEventListener('click', doRestart);
+  done.addEventListener('click', function(){ if (!done.disabled) { phase='done'; render(); } });
+  btns.appendChild(back); btns.appendChild(done);
+  right.appendChild(btns);
+
+  function unlockDone() {
+    done.disabled = false;
+    done.style.opacity = '';
+    done.style.cursor = '';
+  }
+
   esend.addEventListener('click', function(){
     var val = einput.value.trim();
-    if (!val || val.indexOf('@') < 1) { showEmailStatus('Enter a valid email address','err'); return; }
+    if (!val || val.indexOf('@') < 1) { showEmailStatus('Enter a valid email address first','err'); return; }
     sendSummaryEmail(val, noIdea, esend);
+    setTimeout(function(){ unlockDone(); }, 400);
   });
   einput.addEventListener('keydown', function(e){
     if (e.key==='Enter') esend.click();
   });
   ecopy.addEventListener('click', function(){ copySummary(noIdea, ecopy); });
-
-  /* buttons */
-  var btns = mkEl('div','final-btns');
-  var back = mkEl('button','btn-ghost','&#x21A9; Start over');
-  var done = mkEl('button','btn-primary','Done! &#x1F389;');
-  back.addEventListener('click', doRestart);
-  done.addEventListener('click', function(){ phase='done'; render(); });
-  btns.appendChild(back); btns.appendChild(done);
-  right.appendChild(btns);
 
   grid.appendChild(right);
   card.appendChild(grid);
